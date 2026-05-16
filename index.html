@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DigBarnehage · Skaun Kommune & DMMH</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rosa: #e8c4c4;
+    --rosa-lys: #f2dada;
+    --burgunder: #7a3a4a;
+    --burgunder-mork: #5a2535;
+    --navy: #1a2a4a;
+    --navy-lys: #2a3a5a;
+    --krem: #f7f0ee;
+    --tekst: #2d1e25;
+    --tekst-lys: #5a4a52;
+    --hvit: #ffffff;
+    --gronn: #4a7a5a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--krem);
+    color: var(--tekst);
+    line-height: 1.6;
+  }
+
+  #progress {
+    position: fixed; top: 0; left: 0;
+    height: 3px; background: var(--burgunder);
+    width: 0%; z-index: 1000; transition: width 0.1s;
+  }
+
+  nav {
+    position: fixed; top: 3px; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(247,240,238,0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(122,58,74,0.12);
+    padding: 0 2rem;
+  }
+
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; color: var(--burgunder); font-weight: 700;
+  }
+
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--tekst-lys);
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--burgunder); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(145deg, var(--navy) 0%, var(--navy-lys) 40%, #3a4a6a 100%);
+    position: relative; overflow: hidden; padding-top: 60px;
+  }
+
+  .hero-pattern {
+    position: absolute; inset: 0; opacity: 0.06;
+    background-image: repeating-linear-gradient(45deg, var(--rosa) 0px, var(--rosa) 1px, transparent 1px, transparent 40px);
+  }
+
+  .hero-diamonds {
+    position: absolute; top: 0; right: 0;
+    width: 300px; height: 100%;
+    display: flex; flex-direction: column; align-items: flex-end;
+    justify-content: center; gap: 2rem; padding: 2rem; opacity: 0.15;
+  }
+
+  .hero-diamond { color: var(--rosa); font-size: 3rem; animation: float 4s ease-in-out infinite; }
+  .hero-diamond:nth-child(2) { font-size: 2rem; animation-delay: 0.5s; }
+  .hero-diamond:nth-child(3) { font-size: 2.5rem; animation-delay: 1s; }
+  .hero-diamond:nth-child(4) { font-size: 1.5rem; animation-delay: 1.5s; }
+
+  .hero-content {
+    max-width: 820px; padding: 3rem 2rem;
+    position: relative; z-index: 1; text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(232,196,196,0.15); border: 1px solid rgba(232,196,196,0.3);
+    color: var(--rosa-lys); font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; padding: 0.4rem 1rem; border-radius: 2px;
+    margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 6rem); font-weight: 700;
+    color: var(--hvit); line-height: 1.05; margin-bottom: 0.5rem;
+    opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+  }
+  .hero-title span { color: var(--rosa); }
+
+  .hero-sub {
+    font-size: 1.1rem; color: rgba(255,255,255,0.6); font-weight: 300;
+    margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.7s 0.6s forwards;
+  }
+
+  .hero-mal {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    padding: 1.5rem 2rem; border-radius: 4px; margin-bottom: 2.5rem;
+    opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+  }
+
+  .hero-mal-label {
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--rosa); margin-bottom: 0.5rem;
+  }
+
+  .hero-mal p { font-size: 0.95rem; color: rgba(255,255,255,0.8); line-height: 1.6; }
+  .hero-mal p + p { margin-top: 0.5rem; color: rgba(255,255,255,0.6); font-size: 0.88rem; }
+
+  .hero-scroll {
+    opacity: 0; animation: fadeUp 0.7s 1s forwards;
+    color: rgba(255,255,255,0.4); font-size: 0.78rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .scroll-arrow { animation: bounce 1.5s infinite; color: var(--rosa); }
+
+  /* ÅR-SEKSJON */
+  .aar-seksjon {
+    padding: 6rem 2rem; background: var(--krem);
+  }
+
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--burgunder); margin-bottom: 0.6rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--navy); margin-bottom: 0.5rem; line-height: 1.2;
+  }
+
+  .section-sub {
+    font-size: 0.92rem; color: var(--tekst-lys);
+    margin-bottom: 3rem; max-width: 540px;
+  }
+
+  /* Rutenett med år-kort */
+  .aar-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .aar-kort {
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    min-height: 260px;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s, transform 0.55s, box-shadow 0.25s;
+  }
+  .aar-kort.synlig { opacity: 1; transform: translateY(0); }
+  .aar-kort:nth-child(2) { transition-delay: 0.1s; }
+  .aar-kort:nth-child(3) { transition-delay: 0.2s; }
+  .aar-kort:nth-child(4) { transition-delay: 0.3s; }
+
+  .aar-kort:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.18); }
+  .aar-kort:hover .aar-kort-pil { transform: translateX(6px); }
+  .aar-kort:hover .aar-kort-bg { transform: scale(1.03); }
+
+  .aar-kort-bg {
+    position: absolute; inset: 0;
+    transition: transform 0.4s ease;
+  }
+
+  /* Bakgrunnsfarger per år */
+  .aar-kort[data-aar="2026"] .aar-kort-bg { background: linear-gradient(135deg, var(--burgunder-mork) 0%, var(--burgunder) 100%); }
+  .aar-kort[data-aar="2025"] .aar-kort-bg { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-lys) 100%); }
+  .aar-kort[data-aar="2024"] .aar-kort-bg { background: linear-gradient(135deg, #7a5030 0%, #b07040 100%); }
+  .aar-kort[data-aar="2023"] .aar-kort-bg { background: linear-gradient(135deg, #2a5a3a 0%, var(--gronn) 100%); }
+
+  /* Mønster på bakgrunn */
+  .aar-kort-mønster {
+    position: absolute; inset: 0; opacity: 0.07;
+    background-image: repeating-linear-gradient(
+      45deg, #fff 0px, #fff 1px, transparent 1px, transparent 30px
+    );
+  }
+
+  .aar-kort-innhold {
+    position: relative; z-index: 1;
+    padding: 2.5rem 2rem;
+    display: flex; flex-direction: column; height: 100%; min-height: 260px;
+  }
+
+  .aar-kort-aar {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem; font-weight: 700;
+    color: rgba(255,255,255,0.15);
+    line-height: 1; margin-bottom: auto;
+    user-select: none;
+  }
+
+  .aar-kort-bunn {
+    margin-top: 2rem;
+  }
+
+  .aar-kort-antall {
+    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); margin-bottom: 0.5rem;
+  }
+
+  .aar-kort-tittel {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--hvit); line-height: 1.2; margin-bottom: 0.5rem;
+  }
+
+  .aar-kort-beskrivelse {
+    font-size: 0.85rem; color: rgba(255,255,255,0.65); line-height: 1.5;
+    margin-bottom: 1.2rem;
+  }
+
+  .aar-kort-bunntekst {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .aar-kort-tags {
+    display: flex; flex-wrap: wrap; gap: 0.3rem;
+  }
+
+  .aar-kort-tag {
+    font-size: 0.64rem; letter-spacing: 0.07em; text-transform: uppercase;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.85);
+    padding: 0.15rem 0.5rem; border-radius: 2px;
+  }
+
+  .aar-kort-pil {
+    font-size: 1.4rem; color: rgba(255,255,255,0.7);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+
+  footer {
+    background: var(--navy-lys); color: rgba(255,255,255,0.4);
+    text-align: center; padding: 2rem;
+    font-size: 0.78rem; letter-spacing: 0.06em;
+  }
+
+  /* INTRO-SEKSJON */
+  .intro {
+    background: var(--hvit);
+    padding: 5rem 2rem;
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .intro-kort {
+    background: var(--krem);
+    border-radius: 4px;
+    padding: 1.8rem;
+    border-top: 3px solid var(--burgunder);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  .intro-kort.synlig { opacity: 1; transform: translateY(0); }
+  .intro-kort:nth-child(2) { transition-delay: 0.1s; border-top-color: var(--navy); }
+  .intro-kort:nth-child(3) { transition-delay: 0.2s; border-top-color: #b07040; }
+  .intro-kort:nth-child(4) { transition-delay: 0.3s; border-top-color: var(--gronn); }
+
+  .intro-kort-ikon { margin-bottom: 0.9rem; display: flex; align-items: center; }
+
+  .intro-kort h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+
+  .intro-kort p {
+    font-size: 0.86rem; color: var(--tekst-lys); line-height: 1.6;
+  }
+
+  .intro-kort ul {
+    list-style: none; display: flex; flex-direction: column;
+    gap: 0.4rem; margin-top: 0.4rem;
+  }
+
+  .intro-kort ul li {
+    font-size: 0.84rem; color: var(--tekst-lys);
+    padding-left: 1rem; position: relative; line-height: 1.5;
+  }
+
+  .intro-kort ul li::before {
+    content: '·'; position: absolute; left: 0; color: var(--burgunder); font-weight: 700;
+  }
+
+  .intro-kort:nth-child(2) ul li::before { color: var(--navy); }
+  .intro-kort:nth-child(3) ul li::before { color: #b07040; }
+  .intro-kort:nth-child(4) ul li::before { color: var(--gronn); }
+
+  .intro-ingress {
+    max-width: 680px;
+    font-size: 0.95rem; color: var(--tekst-lys); line-height: 1.75;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-label {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--burgunder); margin-bottom: 0.6rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--navy); margin-bottom: 1rem; line-height: 1.2;
+  }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(6px); } }
+  @keyframes float  { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+
+  @media (max-width: 700px) {
+    .nav-links { display: none; }
+    .aar-grid { grid-template-columns: 1fr; }
+    .aar-kort-aar { font-size: 3.5rem; }
+    .intro-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">DigBarnehage · Skaun</span>
+    <ul class="nav-links">
+      <li><a href="#aar">Aktiviteter</a></li>
+      <li><a href="index.html">Om prosjektet</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-pattern"></div>
+  <div class="hero-diamonds">
+    <span class="hero-diamond">◆</span>
+    <span class="hero-diamond">◆</span>
+    <span class="hero-diamond">◆</span>
+    <span class="hero-diamond">◆</span>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">Skaun Kommune · DMMH · NTNU · 2023–</div>
+    <h1 class="hero-title">Dig<span>Barnehage</span></h1>
+    <p class="hero-sub">Kultur for å velge digitalt utstyr i det pedagogiske arbeidet</p>
+    <div class="hero-mal">
+      <p class="hero-mal-label">Overordnet mål</p>
+      <p>Kultur for å velge digitalt utstyr i det pedagogiske arbeidet</p>
+      <p>Delmål: Ruste ledergruppa til å lede prosessen som legger til rette for profesjonsfaglig digital kompetanse for alle ansatte i den enkelte enhet.</p>
+    </div>
+    <div class="hero-scroll">
+      <span>Utforsk reisen</span>
+      <span class="scroll-arrow">↓</span>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO / STÅSTEDSANALYSE -->
+<section class="intro">
+  <div class="container">
+    <p class="section-label">Om prosjektet</p>
+    <h2 class="section-title">DigBarnehage i Skaun</h2>
+    <p class="intro-ingress">
+      DigBarnehage er et kompetanseutviklingsprosjekt i samarbeid mellom Skaun Kommune og DMMH, med faglig støtte fra NTNU. Gjennom en grundig ståstedsanalyse ble fire sentrale innsatsområder identifisert som grunnlag for prosjektets retning.
+    </p>
+    <div class="intro-grid">
+
+      <div class="intro-kort fade-inn">
+        <div class="intro-kort-ikon">
+          <!-- Kompetanse: hode med stråler / kunnskap -->
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--burgunder)">
+            <circle cx="24" cy="20" r="8"/>
+            <circle cx="24" cy="20" r="3"/>
+            <line x1="24" y1="8" x2="24" y2="5"/>
+            <line x1="33.6" y1="11.4" x2="35.7" y2="9.3"/>
+            <line x1="36" y1="20" x2="39" y2="20"/>
+            <line x1="14.4" y1="11.4" x2="12.3" y2="9.3"/>
+            <line x1="12" y1="20" x2="9" y2="20"/>
+            <path d="M14 34 Q24 28 34 34" stroke-width="1.2"/>
+            <line x1="14" y1="34" x2="14" y2="40"/>
+            <line x1="34" y1="34" x2="34" y2="40"/>
+          </svg>
+        </div>
+        <h3>Kompetansenivå</h3>
+        <ul>
+          <li>Kartlegging av kunnskap og holdninger til digital teknologi på tvers av enheter</li>
+          <li>Identifisering av kompetansegap og behov for opplæring</li>
+          <li>Fokus på pedagogisk bruk av digitale verktøy – ikke bare teknisk ferdighet</li>
+        </ul>
+      </div>
+
+      <div class="intro-kort fade-inn">
+        <div class="intro-kort-ikon">
+          <!-- Ledelse: tre sirkler i hierarki -->
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" style="color:var(--navy)">
+            <circle cx="24" cy="10" r="5"/>
+            <circle cx="12" cy="34" r="5"/>
+            <circle cx="36" cy="34" r="5"/>
+            <line x1="24" y1="15" x2="24" y2="24"/>
+            <line x1="24" y1="24" x2="12" y2="29"/>
+            <line x1="24" y1="24" x2="36" y2="29"/>
+            <line x1="12" y1="24" x2="36" y2="24"/>
+          </svg>
+        </div>
+        <h3>Ledelse og endringskultur</h3>
+        <ul>
+          <li>Ledergruppas forberedelse og vilje til å lede digitaliseringsprosessen</li>
+          <li>Etablering av en kultur som støtter endring og læring</li>
+          <li>Evne til å motivere og inspirere ansatte i det digitale arbeidet</li>
+        </ul>
+      </div>
+
+      <div class="intro-kort fade-inn">
+        <div class="intro-kort-ikon">
+          <!-- Teknologi: skjerm med indre sirkel og signal -->
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color:#b07040">
+            <rect x="6" y="10" width="36" height="24" rx="2"/>
+            <circle cx="24" cy="22" r="6"/>
+            <circle cx="24" cy="22" r="2"/>
+            <line x1="16" y1="38" x2="32" y2="38"/>
+            <line x1="24" y1="34" x2="24" y2="38"/>
+            <line x1="18" y1="22" x2="6" y2="22" stroke-opacity="0.35"/>
+            <line x1="30" y1="22" x2="42" y2="22" stroke-opacity="0.35"/>
+          </svg>
+        </div>
+        <h3>Teknologisk infrastruktur</h3>
+        <ul>
+          <li>Kartlegging av tilgjengelig utstyr – antall enheter, type og tilstand</li>
+          <li>Vurdering av internettforbindelse, nettverkstilgang og støttepersonell</li>
+          <li>Infrastrukturklarhet for å nå prosjektets digitaliseringsmål</li>
+        </ul>
+      </div>
+
+      <div class="intro-kort fade-inn">
+        <div class="intro-kort-ikon">
+          <!-- Faglig utvikling: oppadstigende sirkler / vekst -->
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gronn)">
+            <circle cx="10" cy="36" r="4"/>
+            <circle cx="24" cy="26" r="4"/>
+            <circle cx="38" cy="14" r="4"/>
+            <line x1="13.8" y1="33.1" x2="20.2" y2="29"/>
+            <line x1="27.8" y1="23.1" x2="34.2" y2="17"/>
+            <line x1="10" y1="32" x2="10" y2="44"/>
+            <line x1="24" y1="22" x2="24" y2="44"/>
+            <line x1="38" y1="18" x2="38" y2="44"/>
+          </svg>
+        </div>
+        <h3>Faglig utvikling og støtte</h3>
+        <ul>
+          <li>Profesjonsfaglig utvikling med veiledning og erfaringsdeling</li>
+          <li>Pedagogisk dokumentasjon gjennom multimodale logger</li>
+          <li>Integrering av digitale ressurser i barnehagens rammeplan og daglige aktiviteter</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ÅR-KORT -->
+<section class="aar-seksjon" id="aar">
+  <div class="container">
+
+    <div class="aar-grid">
+
+      <!-- 2026 -->
+      <a class="aar-kort" data-aar="2026" href="2026.html">
+        <div class="aar-kort-bg"></div>
+        <div class="aar-kort-mønster"></div>
+        <div class="aar-kort-innhold">
+          <div class="aar-kort-aar">2026</div>
+          <div class="aar-kort-bunn">
+            <div class="aar-kort-antall">2 aktiviteter</div>
+            <div class="aar-kort-tittel">Videreføring</div>
+            <div class="aar-kort-beskrivelse">Fagdag om barnehagen som lærende organisasjon. Senges fem disipliner i praksis.</div>
+            <div class="aar-kort-bunntekst">
+              <div class="aar-kort-tags">
+                <span class="aar-kort-tag">Fagdag</span>
+                <span class="aar-kort-tag">Lærende org.</span>
+              </div>
+              <span class="aar-kort-pil">→</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 2025 -->
+      <a class="aar-kort" data-aar="2025" href="2025.html">
+        <div class="aar-kort-bg"></div>
+        <div class="aar-kort-mønster"></div>
+        <div class="aar-kort-innhold">
+          <div class="aar-kort-aar">2025</div>
+          <div class="aar-kort-bunn">
+            <div class="aar-kort-antall">15 aktiviteter</div>
+            <div class="aar-kort-tittel">Implementering</div>
+            <div class="aar-kort-beskrivelse">Veiledningstopp, fagsamlinger, PfDK-rammeverk og felles personalmøte på folkehøgskole.</div>
+            <div class="aar-kort-bunntekst">
+              <div class="aar-kort-tags">
+                <span class="aar-kort-tag">Veiledning</span>
+                <span class="aar-kort-tag">PfDK</span>
+                <span class="aar-kort-tag">Samlinger</span>
+              </div>
+              <span class="aar-kort-pil">→</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 2024 -->
+      <a class="aar-kort" data-aar="2024" href="2024.html">
+        <div class="aar-kort-bg"></div>
+        <div class="aar-kort-mønster"></div>
+        <div class="aar-kort-innhold">
+          <div class="aar-kort-aar">2024</div>
+          <div class="aar-kort-bunn">
+            <div class="aar-kort-antall">10 aktiviteter</div>
+            <div class="aar-kort-tittel">Planlegging og veiledning</div>
+            <div class="aar-kort-beskrivelse">Fagdag, lokal veiledning i barnehagene, multimodal logg og handlingsplan for neste år.</div>
+            <div class="aar-kort-bunntekst">
+              <div class="aar-kort-tags">
+                <span class="aar-kort-tag">Fagdag</span>
+                <span class="aar-kort-tag">Multimodal logg</span>
+                <span class="aar-kort-tag">Veiledning</span>
+              </div>
+              <span class="aar-kort-pil">→</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 2023 -->
+      <a class="aar-kort" data-aar="2023" href="2023.html">
+        <div class="aar-kort-bg"></div>
+        <div class="aar-kort-mønster"></div>
+        <div class="aar-kort-innhold">
+          <div class="aar-kort-aar">2023</div>
+          <div class="aar-kort-bunn">
+            <div class="aar-kort-antall">4 aktiviteter</div>
+            <div class="aar-kort-tittel">Prosjektoppstart</div>
+            <div class="aar-kort-beskrivelse">Første møter og felles fagdag. Ståstedsanalyse og utforsking av digitale artefakter etter Custers modell.</div>
+            <div class="aar-kort-bunntekst">
+              <div class="aar-kort-tags">
+                <span class="aar-kort-tag">Oppstart</span>
+                <span class="aar-kort-tag">Fagdag</span>
+                <span class="aar-kort-tag">Ståstedsanalyse</span>
+              </div>
+              <span class="aar-kort-pil">→</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  DigBarnehage · Skaun Kommune &amp; DMMH · Høgskole for barnehagelærerutdanning · NTNU
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY, m = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('progress').style.width = (s/m*100) + '%';
+  });
+  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('synlig'); }), { threshold: 0.1 });
+  document.querySelectorAll('.aar-kort, .intro-kort').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

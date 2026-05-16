@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 · DigBarnehage · Skaun</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --rosa: #e8c4c4; --rosa-lys: #f2dada;
+    --burgunder: #7a3a4a; --burgunder-mork: #5a2535;
+    --navy: #1a2a4a; --navy-lys: #2a3a5a;
+    --krem: #f7f0ee; --tekst: #2d1e25; --tekst-lys: #5a4a52;
+    --hvit: #ffffff; --gronn: #4a7a5a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family:'DM Sans',sans-serif; background:var(--krem); color:var(--tekst); line-height:1.6; }
+  #progress { position:fixed; top:0; left:0; height:3px; background:var(--burgunder); width:0%; z-index:1000; transition:width 0.1s; }
+  nav { position:fixed; top:3px; left:0; right:0; z-index:100; background:rgba(247,240,238,0.94); backdrop-filter:blur(12px); border-bottom:1px solid rgba(122,58,74,0.12); padding:0 2rem; }
+  .nav-inner { max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; height:56px; }
+  .nav-logo { font-family:'Playfair Display',serif; font-size:1rem; color:var(--burgunder); font-weight:700; }
+  .nav-tilbake { text-decoration:none; color:var(--tekst-lys); font-size:0.82rem; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; transition:color 0.2s; display:flex; align-items:center; gap:0.4rem; }
+  .nav-tilbake:hover { color:var(--burgunder); }
+  .hero-aar { padding: 8rem 2rem 4rem; }
+  .hero-aar-inner { max-width:1000px; margin:0 auto; }
+  .hero-aar-kicker { font-size:0.75rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--tekst-lys); margin-bottom:0.6rem; }
+  .hero-aar-tittel { font-family:'Playfair Display',serif; font-weight:700; line-height:1; margin-bottom:0.8rem; }
+  .hero-aar-sub { font-size:0.95rem; color:var(--tekst-lys); max-width:520px; line-height:1.6; margin-bottom:2.5rem; }
+  .aar-nav { display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:3rem; }
+  .aar-nav-lnk { text-decoration:none; font-size:0.78rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:0.4rem 1rem; border-radius:2px; transition:background 0.2s, color 0.2s; border:1px solid rgba(122,58,74,0.2); color:var(--tekst-lys); background:var(--hvit); }
+  .aar-nav-lnk.aktiv { color:var(--hvit); border-color:transparent; }
+  .aar-nav-lnk:hover:not(.aktiv) { background:var(--rosa-lys); color:var(--burgunder); }
+  .container { max-width:1000px; margin:0 auto; padding:0 2rem 6rem; }
+  .forklaring { display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:2rem; }
+  .forklaring-item { display:flex; align-items:center; gap:0.4rem; font-size:0.75rem; color:var(--tekst-lys); }
+  .forklaring-stripe { width:14px; height:3px; border-radius:2px; flex-shrink:0; }
+  .aktivitet-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; }
+  .aktivitet-kort {
+    background:var(--hvit); border-radius:4px; padding:1.4rem 1.5rem;
+    border-top:3px solid var(--burgunder);
+    text-decoration:none; color:inherit; display:block;
+    opacity:0; transform:translateY(16px);
+    transition:opacity 0.45s, transform 0.45s, box-shadow 0.2s;
+  }
+  .aktivitet-kort.synlig { opacity:1; transform:translateY(0); }
+  .aktivitet-kort.klikkbar:hover { box-shadow:0 6px 24px rgba(122,58,74,0.12); transform:translateY(-2px); }
+  .aktivitet-kort:not(.klikkbar) { cursor:default; }
+  .ak-type { font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; font-weight:500; margin-bottom:0.5rem; }
+  .ak-dato { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; line-height:1; margin-bottom:0.5rem; }
+  .ak-tittel { font-size:0.95rem; font-weight:500; color:var(--navy); line-height:1.4; margin-bottom:0.4rem; }
+  .aktivitet-kort.klikkbar .ak-tittel { color:var(--burgunder); }
+  .ak-meta { font-size:0.8rem; color:var(--tekst-lys); line-height:1.5; margin-bottom:0.6rem; }
+  .ak-tags { display:flex; flex-wrap:wrap; gap:0.3rem; margin-top:0.5rem; }
+  .ak-tag { font-size:0.64rem; letter-spacing:0.07em; text-transform:uppercase; background:var(--rosa-lys); color:var(--burgunder); padding:0.14rem 0.48rem; border-radius:2px; }
+  .ak-pil { font-size:0.82rem; color:var(--burgunder); margin-top:0.8rem; display:none; }
+  .aktivitet-kort.klikkbar .ak-pil { display:block; }
+  .type-fagdag    { border-top-color:var(--burgunder); }
+  .type-samling   { border-top-color:var(--navy); }
+  .type-veiledning{ border-top-color:var(--gronn); }
+  .type-konferanse{ border-top-color:#b07040; }
+  .type-arbeidsmote { border-top-color:rgba(122,58,74,0.25); }
+  .type-fagdag    .ak-type { color:var(--burgunder); }
+  .type-samling   .ak-type { color:var(--navy); }
+  .type-veiledning .ak-type { color:var(--gronn); }
+  .type-konferanse .ak-type { color:#b07040; }
+  .type-arbeidsmote .ak-type { color:var(--tekst-lys); }
+  footer { background:var(--navy-lys); color:rgba(255,255,255,0.4); text-align:center; padding:2rem; font-size:0.78rem; letter-spacing:0.06em; }
+  @media (max-width:700px) { .aktivitet-grid { grid-template-columns:1fr; } }
+
+  .hero-aar { background:linear-gradient(135deg,#5a2535 0%,#7a3a4a 100%); }
+  .hero-aar-tittel { font-size:clamp(5rem,14vw,10rem); color:rgba(255,255,255,0.15); }
+  .hero-aar-kicker { color:rgba(255,255,255,0.6); }
+  .hero-aar-sub { color:rgba(255,255,255,0.65); }
+  .aar-nav-lnk.aktiv[data-aar="2026"] { background:rgba(255,255,255,0.2); color:var(--hvit); }
+  .hero-aar-antall { font-family:'Playfair Display',serif; font-size:1.1rem; color:rgba(255,255,255,0.5); margin-bottom:0.3rem; }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">DigBarnehage · 2026</span>
+    <a href="index.html" class="nav-hjem" title="Til forsiden" style="text-decoration:none;color:var(--tekst-lys);display:flex;align-items:center;transition:color 0.2s;" onmouseover="this.style.color='var(--burgunder)'" onmouseout="this.style.color='var(--tekst-lys)'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></a>
+    <a class="nav-tilbake" href="index.html">← Alle år</a>
+  </div>
+</nav>
+
+<div class="hero-aar">
+  <div class="hero-aar-inner">
+    <div class="hero-aar-kicker">DigBarnehage · Skaun Kommune & DMMH</div>
+    <div class="hero-aar-tittel">2026</div>
+    <div class="hero-aar-antall">3 aktiviteter</div>
+    <div class="hero-aar-sub">Fagdag om barnehagen som lærende organisasjon. Senges fem disipliner i barnehagekontekst.</div>
+    <div class="aar-nav">
+      <a class="aar-nav-lnk  aktiv" href="2026.html" data-aar="2026">2026</a>
+      <a class="aar-nav-lnk" href="2025.html" data-aar="2025">2025</a>
+      <a class="aar-nav-lnk" href="2024.html" data-aar="2024">2024</a>
+      <a class="aar-nav-lnk" href="2023.html" data-aar="2023">2023</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="forklaring">
+    <div class="forklaring-item"><div class="forklaring-stripe" style="background:var(--burgunder)"></div>Fagdag</div>
+    <div class="forklaring-item"><div class="forklaring-stripe" style="background:var(--navy)"></div>Samling</div>
+    <div class="forklaring-item"><div class="forklaring-stripe" style="background:var(--gronn)"></div>Veiledning</div>
+    <div class="forklaring-item"><div class="forklaring-stripe" style="background:#b07040"></div>Konferanse</div>
+    <div class="forklaring-item"><div class="forklaring-stripe" style="background:rgba(122,58,74,0.25)"></div>Arbeidsmøte</div>
+  </div>
+  <div class="aktivitet-grid">
+
+    <div class="aktivitet-kort type-arbeidsmote">
+      <div class="ak-type">Arbeidsmøte</div>
+      <div class="ak-dato">16. jan</div>
+      <div class="ak-tittel">Digitalt planleggingsmøte fagdag DMMH</div>
+      <div class='ak-meta'>Forberedelse til fagdag 26. februar</div>
+    </div>
+
+    <a class="aktivitet-kort type-fagdag klikkbar" href="dig-bhg-workshop.html">
+      <div class="ak-type">Fagdag</div>
+      <div class="ak-dato">26. feb</div>
+      <div class="ak-tittel">Fagdag – DigBarnehage · Barnehagen som lærende organisasjon</div>
+      <div class='ak-meta'>kl. 08:30–15:00</div>
+      <div class='ak-tags'><span class="ak-tag">Fagdag</span><span class="ak-tag">Lærende org.</span><span class="ak-tag">Senges disipliner</span></div>
+      <div class="ak-pil">Les mer →</div>
+    </a>
+
+    <a class="aktivitet-kort type-samling klikkbar" href="20mai2026.html">
+      <div class="ak-type">Samling</div>
+      <div class="ak-dato">20. mai</div>
+      <div class="ak-tittel">Sømløse overganger kropp og digitale rom</div>
+      <div class='ak-meta'>Kollektiv kompetanseutvikling på avdelingen</div>
+      <div class='ak-tags'><span class="ak-tag">Gruppeoppgave</span><span class="ak-tag">Senges disipliner</span><span class="ak-tag">Kapasitetsbygging</span></div>
+      <div class="ak-pil">Les mer →</div>
+    </a>
+
+  </div>
+</div>
+
+<footer>DigBarnehage · Skaun Kommune &amp; DMMH · NTNU</footer>
+<script>
+  window.addEventListener('scroll', () => {
+    const s=window.scrollY, m=document.body.scrollHeight-window.innerHeight;
+    document.getElementById('progress').style.width=(s/m*100)+'%';
+  });
+  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('synlig');}),{threshold:0.08});
+  document.querySelectorAll('.aktivitet-kort').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

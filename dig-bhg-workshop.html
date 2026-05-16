@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop DIG-bhg · Skaun Kommune & DMMH</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rosa: #e8c4c4;
+    --rosa-lys: #f2dada;
+    --burgunder: #7a3a4a;
+    --burgunder-mork: #5a2535;
+    --navy: #1a2a4a;
+    --navy-lys: #2a3a5a;
+    --krem: #f7f0ee;
+    --tekst: #2d1e25;
+    --tekst-lys: #5a4a52;
+    --hvit: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--krem);
+    color: var(--tekst);
+    line-height: 1.6;
+  }
+
+  /* Progress bar */
+  #progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--burgunder);
+    width: 0%;
+    z-index: 1000;
+    transition: width 0.1s;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 3px; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(247, 240, 238, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(122, 58, 74, 0.15);
+    padding: 0 2rem;
+  }
+
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--burgunder);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.8rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--tekst-lys);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--burgunder); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--rosa) 0%, var(--rosa-lys) 50%, #dce8f0 100%);
+    position: relative;
+    overflow: hidden;
+    padding-top: 60px;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: rgba(122, 58, 74, 0.08);
+    border-radius: 50%;
+    transform: rotate(45deg);
+  }
+
+  .hero-diamond {
+    position: absolute;
+    opacity: 0.12;
+    font-size: 4rem;
+    color: var(--burgunder);
+  }
+  .hero-diamond:nth-child(1) { top: 10%; right: 8%; }
+  .hero-diamond:nth-child(2) { top: 25%; right: 4%; font-size: 2.5rem; }
+  .hero-diamond:nth-child(3) { bottom: 20%; right: 10%; font-size: 3rem; }
+  .hero-diamond:nth-child(4) { bottom: 10%; right: 5%; font-size: 2rem; }
+
+  .hero-content {
+    text-align: center;
+    max-width: 780px;
+    padding: 3rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-kicker {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--burgunder);
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.4s forwards;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--burgunder-mork);
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.6s forwards;
+  }
+
+  .hero-question {
+    background: var(--burgunder);
+    color: var(--hvit);
+    padding: 1.5rem 2.5rem;
+    border-radius: 4px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 620px;
+    margin: 0 auto 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.8s forwards;
+  }
+
+  .hero-scroll {
+    opacity: 0;
+    animation: fadeUp 0.7s 1s forwards;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--tekst-lys);
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .scroll-arrow {
+    animation: bounce 1.5s infinite;
+    font-size: 1.2rem;
+    color: var(--burgunder);
+  }
+
+  /* Sections */
+  section {
+    padding: 5rem 2rem;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--burgunder);
+    margin-bottom: 0.6rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--navy);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  /* Bakgrunn */
+  .bakgrunn {
+    background: var(--hvit);
+  }
+
+  .bakgrunn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .bakgrunn-kort {
+    background: var(--krem);
+    border-left: 3px solid var(--burgunder);
+    padding: 1.4rem 1.5rem;
+    border-radius: 2px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .bakgrunn-kort.synlig { opacity: 1; transform: translateY(0); }
+  .bakgrunn-kort:nth-child(2) { transition-delay: 0.1s; }
+  .bakgrunn-kort:nth-child(3) { transition-delay: 0.2s; }
+
+  .bakgrunn-kort p {
+    font-size: 0.95rem;
+    color: var(--tekst-lys);
+    line-height: 1.6;
+  }
+
+  /* Mingel */
+  .mingel {
+    background: linear-gradient(135deg, var(--burgunder) 0%, var(--burgunder-mork) 100%);
+    color: var(--hvit);
+  }
+
+  .mingel .section-label { color: var(--rosa); }
+  .mingel .section-title { color: var(--hvit); }
+
+  .mingel-sporsmal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .mingel-kort {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 2rem;
+    border-radius: 4px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .mingel-kort.synlig { opacity: 1; transform: translateY(0); }
+  .mingel-kort:nth-child(2) { transition-delay: 0.15s; }
+
+  .mingel-nr {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.2);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .mingel-kort p {
+    font-size: 1.1rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--rosa-lys);
+    line-height: 1.5;
+  }
+
+  /* Oversikt */
+  .oversikt {
+    background: var(--krem);
+  }
+
+  .disipliner-sirkel {
+    display: flex;
+    justify-content: center;
+    margin: 3rem 0;
+    position: relative;
+  }
+
+  .sirkel-container {
+    width: 380px;
+    height: 380px;
+    position: relative;
+  }
+
+  .sirkel-ring {
+    width: 280px; height: 280px;
+    border: 1.5px solid rgba(122, 58, 74, 0.25);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .sirkel-senter {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: var(--navy);
+    color: var(--hvit);
+    width: 110px; height: 110px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .sirkel-node {
+    position: absolute;
+    background: var(--burgunder);
+    color: var(--hvit);
+    width: 90px; height: 90px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.3;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .sirkel-node:hover {
+    background: var(--burgunder-mork);
+    transform: scale(1.05);
+  }
+
+  /* Posisjonering av nodene */
+  .node-top    { top: 0;   left: 50%; transform: translateX(-50%); }
+  .node-right  { top: 50%; right: 0;  transform: translateY(-50%); }
+  .node-bottom { bottom: 0; left: 50%; transform: translateX(-50%); }
+  .node-left   { top: 50%; left: 0;  transform: translateY(-50%); }
+
+  .disipliner-liste {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .disiplin-bar {
+    background: var(--rosa);
+    padding: 0.9rem 1.4rem;
+    border-radius: 3px;
+    font-weight: 500;
+    color: var(--navy);
+    cursor: pointer;
+    transition: background 0.2s, padding-left 0.2s;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.4s, transform 0.4s, background 0.2s;
+  }
+
+  .disiplin-bar.synlig { opacity: 1; transform: translateX(0); }
+  .disiplin-bar:nth-child(2) { transition-delay: 0.1s; background: rgba(232,196,196,0.7); }
+  .disiplin-bar:nth-child(3) { transition-delay: 0.2s; background: rgba(232,196,196,0.5); }
+  .disiplin-bar:nth-child(4) { transition-delay: 0.3s; background: rgba(232,196,196,0.35); }
+  .disiplin-bar:nth-child(5) { transition-delay: 0.4s; background: rgba(232,196,196,0.2); color: var(--burgunder); border: 1px solid var(--burgunder); }
+
+  /* Disiplin-seksjoner */
+  .disiplin-seksjon {
+    padding: 5rem 2rem;
+    border-top: 1px solid rgba(122, 58, 74, 0.1);
+  }
+
+  .disiplin-seksjon:nth-child(odd) { background: var(--hvit); }
+  .disiplin-seksjon:nth-child(even) { background: var(--krem); }
+
+  .disiplin-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .disiplin-nummer {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 700;
+    color: rgba(122, 58, 74, 0.12);
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: -0.5rem;
+  }
+
+  .disiplin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .disiplin-kolonne h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--navy);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(122,58,74,0.2);
+  }
+
+  .disiplin-kolonne ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .disiplin-kolonne li {
+    font-size: 0.92rem;
+    color: var(--tekst-lys);
+    line-height: 1.5;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .disiplin-kolonne li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--burgunder);
+    font-weight: 700;
+  }
+
+  .sitat-boks {
+    background: var(--rosa-lys);
+    border-left: 3px solid var(--burgunder);
+    padding: 1.2rem 1.6rem;
+    margin: 1.5rem 0;
+    border-radius: 0 3px 3px 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--burgunder-mork);
+    line-height: 1.6;
+  }
+
+  .refleksjon-boks {
+    background: linear-gradient(135deg, rgba(232,196,196,0.3), rgba(220,232,240,0.3));
+    border: 1px solid rgba(122,58,74,0.15);
+    padding: 1.8rem 2rem;
+    border-radius: 4px;
+    margin-top: 2rem;
+  }
+
+  .refleksjon-boks h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--burgunder);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-style: normal;
+  }
+
+  .refleksjon-boks ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .refleksjon-boks li {
+    font-size: 0.92rem;
+    color: var(--tekst-lys);
+    padding-left: 1.2rem;
+    position: relative;
+  }
+
+  .refleksjon-boks li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--burgunder);
+    font-size: 0.8rem;
+  }
+
+  /* Workshop-del */
+  .workshop {
+    background: var(--navy);
+    color: var(--hvit);
+    padding: 5rem 2rem;
+  }
+
+  .workshop .section-label { color: var(--rosa); }
+  .workshop .section-title { color: var(--hvit); }
+
+  .workshop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .workshop-boks {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 2rem;
+    border-radius: 4px;
+  }
+
+  .workshop-boks h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--rosa-lys);
+    margin-bottom: 1rem;
+  }
+
+  .workshop-boks ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .workshop-boks li {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .workshop-boks li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--rosa);
+  }
+
+  /* Veien videre */
+  .veien-videre {
+    background: var(--rosa);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+
+  .veien-videre .section-title { color: var(--burgunder-mork); }
+
+  .veien-sporsmal {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--navy);
+    max-width: 680px;
+    margin: 2rem auto 0;
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--navy-lys);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* Keyframes */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(6px); }
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .bakgrunn-grid, .mingel-sporsmal, .disiplin-grid, .workshop-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .disiplin-nummer { font-size: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">DIG-bhg · DMMH</span>
+    <ul class="nav-links">
+      <li><a href="#bakgrunn">Bakgrunn</a></li>
+      <li><a href="#disipliner">Disiplinene</a></li>
+      <li><a href="#workshop">Workshop</a></li>
+      <li><a href="#veien-videre">Veien videre</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <span class="hero-diamond">◆</span>
+  <span class="hero-diamond">◆</span>
+  <span class="hero-diamond">◆</span>
+  <span class="hero-diamond">◆</span>
+  <div class="hero-content">
+    <p class="hero-kicker">Skaun Kommune &amp; DMMH · Workshop</p>
+    <h1 class="hero-title">Workshop DIG-bhg</h1>
+    <p class="hero-sub">Barnehagen som lærende organisasjon</p>
+    <div class="hero-question">
+      «Hvordan kan innsikt i de fem disiplinene om lærende organisasjoner hjelpe ledere i barnehagen å utvikle og opprette barnehagen som en lærende organisasjon?»
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll for å utforske</span>
+      <span class="scroll-arrow">↓</span>
+    </div>
+  </div>
+</section>
+
+<!-- Faglig mingel -->
+<section class="mingel" id="mingel">
+  <div class="container">
+    <p class="section-label">Oppvarming</p>
+    <h2 class="section-title">Faglig mingel</h2>
+    <div class="mingel-sporsmal">
+      <div class="mingel-kort fade-in">
+        <div class="mingel-nr">01</div>
+        <p>Hva traff deg i det du har lest?</p>
+      </div>
+      <div class="mingel-kort fade-in">
+        <div class="mingel-nr">02</div>
+        <p>Hva gav ikke mening eller hva provoserte deg i det du har lest?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bakgrunn -->
+<section class="bakgrunn" id="bakgrunn">
+  <div class="container">
+    <p class="section-label">Kontekst</p>
+    <h2 class="section-title">Hvorfor skal barnehagen være en lærende organisasjon?</h2>
+    <div class="bakgrunn-grid">
+      <div class="bakgrunn-kort fade-in">
+        <p><strong>Rammeplan for barnehagen (2017)</strong> slår fast at barnehagen skal være en lærende organisasjon.</p>
+      </div>
+      <div class="bakgrunn-kort fade-in">
+        <p>Rask samfunnsutvikling krever <em>organiske organisasjoner</em> fremfor <em>mekaniske organisasjoner</em>.</p>
+      </div>
+      <div class="bakgrunn-kort fade-in">
+        <p>Kjernen i en lærende organisasjon er evnen til tilpasning gjennom en interaktiv relasjon mellom samfunn og organisasjon.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Oversikt disipliner -->
+<section class="oversikt" id="disipliner">
+  <div class="container">
+    <p class="section-label">Teoretisk grunnlag</p>
+    <h2 class="section-title">Senges fem disipliner for lærende organisasjoner</h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 2rem;">
+      <div class="disipliner-liste">
+        <div class="disiplin-bar fade-in">Personlig mestring</div>
+        <div class="disiplin-bar fade-in">Felles visjon</div>
+        <div class="disiplin-bar fade-in">Mentale modeller</div>
+        <div class="disiplin-bar fade-in">Gruppelæring</div>
+        <div class="disiplin-bar fade-in">Systemforståelse</div>
+      </div>
+      <div style="text-align: center;">
+        <div class="sirkel-container">
+          <div class="sirkel-ring"></div>
+          <div class="sirkel-node node-top">Felles<br>visjon</div>
+          <div class="sirkel-node node-right">Mentale<br>modeller</div>
+          <div class="sirkel-node node-bottom">Gruppe-<br>læring</div>
+          <div class="sirkel-node node-left">Personlig<br>mestring</div>
+          <div class="sirkel-senter">System-<br>tenkning</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:0.82rem; color:var(--tekst-lys); margin-top:1rem; text-align:center; letter-spacing:0.04em;">
+      Sentrale spørsmål: Hvordan passer disiplinene inn i <em>min</em> barnehage, min ledelse, og min pfdk-utvikling?
+    </p>
+  </div>
+</section>
+
+<!-- 1: Personlig mestring -->
+<div class="disiplin-seksjon fade-in">
+  <div class="container">
+    <div class="disiplin-header">
+      <div class="disiplin-nummer">01</div>
+      <div>
+        <p class="section-label">Disiplin 1</p>
+        <h2 class="section-title">Personlig mestring</h2>
+      </div>
+    </div>
+    <div class="disiplin-grid">
+      <div class="disiplin-kolonne">
+        <h3>Hva er det?</h3>
+        <ul>
+          <li>Den enkeltes personlige vekst, læring og endringskompetanse</li>
+          <li>Personer med høy grad av personlig mestring er <em>søkende</em></li>
+          <li>Ingen garanti, men en forutsetning</li>
+          <li>Krever en aktiv innsats – man må <em>ville det</em> og <em>velge det</em></li>
+        </ul>
+      </div>
+      <div class="disiplin-kolonne">
+        <h3>Hvordan kan vi forstå dette i barnehagen?</h3>
+        <ul>
+          <li>Oppmuntre, stimulere og tilrettelegge for den enkeltes læring – en investering i fellesskapets kunnskapsbank</li>
+          <li>Organisasjonen tilrettelegger – individet tar ansvar</li>
+          <li>Bygge en organisasjon av lærende mennesker – trygghet å utvikle egne visjoner</li>
+          <li>En arbeidsplass å vokse i</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sitat-boks">«Lederne må arbeide uopphørlig for å fremme et organisasjonsmiljø der prinsippene bak personlig mestring blir praktisert i det daglige.»</div>
+    <div class="refleksjon-boks">
+      <h4>Stoppunkt for refleksjon</h4>
+      <ul>
+        <li>Hvordan passer personlig mestring inn i min barnehage og min måte å lede på?</li>
+        <li>Hvordan passer det inn i min tilrettelegging for pfdk-utvikling?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 2: Mentale modeller -->
+<div class="disiplin-seksjon fade-in">
+  <div class="container">
+    <div class="disiplin-header">
+      <div class="disiplin-nummer">02</div>
+      <div>
+        <p class="section-label">Disiplin 2</p>
+        <h2 class="section-title">Mentale modeller</h2>
+      </div>
+    </div>
+    <div class="disiplin-grid">
+      <div class="disiplin-kolonne">
+        <h3>Hva er det?</h3>
+        <ul>
+          <li>Inngrodde antakelser, generaliseringer og tankebilder om verden</li>
+          <li>Kan utvikles til fastgrodde kulturer i organisasjoner</li>
+          <li>Påvirker individers handlinger og kan hindre læring (isfjellmodellen)</li>
+          <li>Styre mentale modeller – gjennomføre lærende samtaler</li>
+        </ul>
+      </div>
+      <div class="disiplin-kolonne">
+        <h3>Hvordan kan vi forstå dette i barnehagen?</h3>
+        <ul>
+          <li>Det underbevisste forblir uutforsket – gjør taus kunnskap eksplisitt!</li>
+          <li>Reflekter og synliggjør organisasjonens mentale modeller</li>
+          <li>De mentale modellene må synliggjøres, diskuteres og gjøres til gjenstand for kritisk vurdering</li>
+        </ul>
+      </div>
+    </div>
+    <div class="refleksjon-boks">
+      <h4>Stoppunkt for refleksjon</h4>
+      <ul>
+        <li>Hvordan passer mentale modeller inn i min barnehage eller min måte å lede på?</li>
+        <li>Hvordan passer det inn i min tilrettelegging for pfdk-utvikling?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 3: Felles visjon -->
+<div class="disiplin-seksjon fade-in">
+  <div class="container">
+    <div class="disiplin-header">
+      <div class="disiplin-nummer">03</div>
+      <div>
+        <p class="section-label">Disiplin 3</p>
+        <h2 class="section-title">Felles visjon</h2>
+      </div>
+    </div>
+    <div class="disiplin-grid">
+      <div class="disiplin-kolonne">
+        <h3>Hva er det?</h3>
+        <ul>
+          <li>Et felles bilde av en ønsket fremtid som betyr noe for hvert enkelt menneske</li>
+          <li>Knytter menneskene sammen og skaper en felles identitet</li>
+          <li>Fremmer langsiktig vilje til innsats</li>
+          <li>Motvirker inngrodde tankemåter og synspunkter</li>
+        </ul>
+      </div>
+      <div class="disiplin-kolonne">
+        <h3>Hvordan kan vi forstå dette i barnehagen?</h3>
+        <ul>
+          <li>Utvikle ferdigheter for å omsette individuelle visjoner til felles visjoner</li>
+          <li>Kartlegge hvilke visjoner som deles av de ansatte</li>
+          <li>Generativ læring henger tett sammen med felles visjon</li>
+          <li>Hva er den pedagogiske kjernen?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sitat-boks">«Visjoner kan være påtvunget. Slike visjoner vil i følge Senge i beste fall bidra til lydighet – ikke til en forpliktende innstilling.»</div>
+    <div class="refleksjon-boks">
+      <h4>Stoppunkt for refleksjon</h4>
+      <ul>
+        <li>Hvordan passer felles visjon inn i min barnehage eller min måte å lede på?</li>
+        <li>Hvordan passer det inn i min tilrettelegging for pfdk-utvikling?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 4: Gruppelæring -->
+<div class="disiplin-seksjon fade-in">
+  <div class="container">
+    <div class="disiplin-header">
+      <div class="disiplin-nummer">04</div>
+      <div>
+        <p class="section-label">Disiplin 4</p>
+        <h2 class="section-title">Gruppelæring</h2>
+      </div>
+    </div>
+    <div class="disiplin-grid">
+      <div class="disiplin-kolonne">
+        <h3>Hva er det?</h3>
+        <ul>
+          <li>Sentralt at organisasjonsmedlemmene får til å lære <em>sammen</em></li>
+          <li>Enormt potensiale i samarbeidende læring</li>
+          <li>En lærende gruppe beveger seg mellom dialog og diskusjon</li>
+          <li>Krever relasjonelle ferdigheter som trenes og utvikles sammen</li>
+        </ul>
+      </div>
+      <div class="disiplin-kolonne">
+        <h3>Diskusjon vs. dialog i barnehagen</h3>
+        <ul>
+          <li><strong>Diskusjon:</strong> Ulike synspunkter presenteres og forsvares – resulterer i en konklusjon</li>
+          <li><strong>Dialog:</strong> Ikke et poeng å vinne, men å oppnå større forståelse – fri og kreativ utforskning</li>
+          <li>Begge er nødvendige – men for ulike formål</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sitat-boks">«Gruppelæring utvikler menneskers evne til å søke å forstå det større bildet som finnes utenfor enkeltmenneskers perspektiv.»</div>
+    <div style="background: var(--krem); border: 1px solid rgba(122,58,74,0.2); padding: 1.5rem 2rem; border-radius: 4px; margin: 1.5rem 0;">
+      <p style="font-size:0.82rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--burgunder); margin-bottom:0.8rem; font-weight:500;">Spilleregler for lærende grupper</p>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
+        <li style="font-size:0.9rem; color:var(--tekst-lys); padding-left:1rem; position:relative;"><span style="position:absolute;left:0;color:var(--burgunder);">·</span>Alle fremviser villighet til å granske og reflektere over egne antakelser</li>
+        <li style="font-size:0.9rem; color:var(--tekst-lys); padding-left:1rem; position:relative;"><span style="position:absolute;left:0;color:var(--burgunder);">·</span>Alle behandler hverandre kollegialt – hierarkiet er utenfor møtene</li>
+        <li style="font-size:0.9rem; color:var(--tekst-lys); padding-left:1rem; position:relative;"><span style="position:absolute;left:0;color:var(--burgunder);">·</span>Alle bidrar til å skape en søkende atmosfære og tankegang</li>
+      </ul>
+    </div>
+    <div class="refleksjon-boks">
+      <h4>Stoppunkt for refleksjon</h4>
+      <ul>
+        <li>Hvordan passer gruppelæring inn i min barnehage eller min måte å lede på?</li>
+        <li>Hvordan passer det inn i min tilrettelegging for pfdk-utvikling?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 5: Systemforståelse -->
+<div class="disiplin-seksjon fade-in">
+  <div class="container">
+    <div class="disiplin-header">
+      <div class="disiplin-nummer">05</div>
+      <div>
+        <p class="section-label">Disiplin 5</p>
+        <h2 class="section-title">Systemforståelse</h2>
+      </div>
+    </div>
+    <div class="disiplin-grid">
+      <div class="disiplin-kolonne">
+        <h3>Hva er det?</h3>
+        <ul>
+          <li>Systemtenkning som ser alle de andre fire disiplinene i sammenheng</li>
+          <li>System = sammenhengende helhet; systemtenkning = helhetlig tankegang</li>
+          <li>Løsningen på ett problem kan skape nye problemer et annet sted</li>
+          <li>Manglende systemforståelse leder til kompensasjonsfeedback</li>
+        </ul>
+      </div>
+      <div class="disiplin-kolonne">
+        <h3>Hvordan kan vi forstå dette i barnehagen?</h3>
+        <ul>
+          <li>Skape systemforståelse hos alle ansatte – det er ikke bare min/din avdeling</li>
+          <li>Skape en forståelse av utvikling som en prosess, ikke et statisk øyeblikksbilde</li>
+          <li>Oppfordre til langsiktig tenking – ikke bare dette barnehageåret</li>
+        </ul>
+      </div>
+    </div>
+    <div class="sitat-boks">«I systemtenkning er alle påvirkninger både årsak og virkning. Ved å følge påvirkningsstrømmer kan vi se mønstre som gjentar seg.»</div>
+    <div class="refleksjon-boks">
+      <h4>Stoppunkt for refleksjon</h4>
+      <ul>
+        <li>Hvordan passer systemforståelse inn i min barnehage eller min måte å lede på?</li>
+        <li>Hvordan passer det inn i min tilrettelegging for pfdk-utvikling?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Workshop -->
+<section class="workshop" id="workshop">
+  <div class="container">
+    <p class="section-label">Praktisk arbeid</p>
+    <h2 class="section-title">Hvordan gjør vi det?</h2>
+    <div class="workshop-grid">
+      <div class="workshop-boks">
+        <h3>Oppgaven</h3>
+        <ul>
+          <li>Jobbe i par</li>
+          <li>Lage en digital poster som tar for seg hvordan du som leder kan jobbe godt med de fem disiplinene i din barnehage</li>
+        </ul>
+      </div>
+      <div class="workshop-boks">
+        <h3>Støttende spørsmål</h3>
+        <ul>
+          <li>Hvilke verktøy og hvilken kunnskap har jeg som leder for å utvikle de fem disiplinene?</li>
+          <li>Hvilke strukturer har vi allerede på plass?</li>
+          <li>Hva trenger vi å forsterke?</li>
+          <li>Hvilke disipliner trenger mer oppfølging enn andre?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Veien videre -->
+<section class="veien-videre" id="veien-videre">
+  <div class="container">
+    <p class="section-label">Avslutning</p>
+    <h2 class="section-title">Veien videre</h2>
+    <p class="veien-sporsmal">Hvordan skal vi som gruppe jobbe videre med de fem disiplinene for å utvikle barnehagen til en lærende organisasjon?</p>
+  </div>
+</section>
+
+<footer>
+  Workshop DIG-bhg · Skaun Kommune &amp; DMMH · Høgskole for barnehagelærerutdanning
+</footer>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const max = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('progress').style.width = (scrolled / max * 100) + '%';
+  });
+
+  // Fade in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('synlig');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in, .bakgrunn-kort, .mingel-kort, .disiplin-bar, .disiplin-seksjon').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>

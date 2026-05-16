@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20. mai 2026 · Sømløse overganger · DigBarnehage</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rosa: #e8c4c4;
+    --rosa-lys: #f2dada;
+    --burgunder: #7a3a4a;
+    --burgunder-mork: #5a2535;
+    --navy: #1a2a4a;
+    --navy-lys: #2a3a5a;
+    --krem: #f7f0ee;
+    --tekst: #2d1e25;
+    --tekst-lys: #5a4a52;
+    --hvit: #ffffff;
+    --gronn: #4a7a5a;
+    --farge: #3a5a6a;
+    --farge-lys: #4a6a7a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--krem);
+    color: var(--tekst);
+    line-height: 1.6;
+  }
+
+  #progress {
+    position: fixed; top: 0; left: 0;
+    height: 3px; background: var(--farge);
+    width: 0%; z-index: 1000; transition: width 0.1s;
+  }
+
+  nav {
+    position: fixed; top: 3px; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(247,240,238,0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(58,90,106,0.12);
+    padding: 0 2rem;
+  }
+
+  .nav-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; color: var(--farge); font-weight: 700;
+  }
+
+  .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--tekst-lys);
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--farge); }
+
+  .nav-tilbake {
+    text-decoration: none; color: var(--tekst-lys);
+    font-size: 0.82rem; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-tilbake:hover { color: var(--farge); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #2a3a4a 0%, var(--farge) 50%, #5a7a8a 100%);
+    position: relative; overflow: hidden; padding-top: 60px;
+  }
+
+  .hero-pattern {
+    position: absolute; inset: 0; opacity: 0.05;
+    background-image: repeating-linear-gradient(
+      45deg, var(--rosa) 0px, var(--rosa) 1px, transparent 1px, transparent 40px
+    );
+  }
+
+  .hero-diamonds {
+    position: absolute; top: 0; right: 0;
+    width: 300px; height: 100%;
+    display: flex; flex-direction: column; align-items: flex-end;
+    justify-content: center; gap: 2rem; padding: 2rem; opacity: 0.12;
+  }
+
+  .hero-diamond { color: var(--rosa); font-size: 3rem; animation: float 4s ease-in-out infinite; }
+  .hero-diamond:nth-child(2) { font-size: 2rem; animation-delay: 0.5s; }
+  .hero-diamond:nth-child(3) { font-size: 2.5rem; animation-delay: 1s; }
+
+  .hero-content {
+    max-width: 800px; padding: 3rem 2rem;
+    position: relative; z-index: 1; text-align: center;
+  }
+
+  .hero-kicker {
+    font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6); margin-bottom: 0.8rem;
+    opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+  }
+
+  .hero-dato {
+    display: inline-block;
+    background: rgba(232,196,196,0.15); border: 1px solid rgba(232,196,196,0.3);
+    color: var(--rosa-lys); font-size: 0.78rem; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.35rem 1rem; border-radius: 2px;
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.7s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4.5rem); font-weight: 700;
+    color: var(--hvit); line-height: 1.1; margin-bottom: 0.6rem;
+    opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+  }
+
+  .hero-sub {
+    font-size: 1.1rem; color: rgba(255,255,255,0.65); font-weight: 300;
+    margin-bottom: 2.5rem;
+    opacity: 0; animation: fadeUp 0.7s 0.6s forwards;
+  }
+
+  .hero-sporsmal {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
+    padding: 1.5rem 2rem; border-radius: 4px;
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 1.05rem; color: var(--hvit); line-height: 1.6;
+    margin-bottom: 2.5rem;
+    opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+  }
+
+  .hero-scroll {
+    opacity: 0; animation: fadeUp 0.7s 1s forwards;
+    color: rgba(255,255,255,0.4); font-size: 0.78rem;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  }
+  .scroll-arrow { animation: bounce 1.5s infinite; color: var(--rosa); }
+
+  /* SEKSJONER */
+  section { padding: 5rem 2rem; }
+  .container { max-width: 1000px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--farge); margin-bottom: 0.6rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    color: var(--navy); margin-bottom: 1.2rem; line-height: 1.2;
+  }
+
+  .ingress {
+    font-size: 0.95rem; color: var(--tekst-lys); line-height: 1.75;
+    max-width: 680px; margin-bottom: 2.5rem;
+  }
+
+  .fade-in {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  .fade-in.synlig { opacity: 1; transform: translateY(0); }
+
+  /* AGENDA */
+  .agenda { background: var(--hvit); }
+
+  .agenda-grid {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0;
+    border: 1px solid rgba(58,90,106,0.12);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .agenda-rad {
+    display: contents;
+  }
+
+  .agenda-tid {
+    background: var(--farge);
+    color: rgba(255,255,255,0.9);
+    font-size: 0.82rem; font-weight: 500;
+    padding: 1rem 1.2rem;
+    display: flex; align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
+  .agenda-innhold {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(58,90,106,0.08);
+    display: flex; flex-direction: column; justify-content: center;
+  }
+
+  .agenda-rad:last-child .agenda-tid,
+  .agenda-rad:last-child .agenda-innhold { border-bottom: none; }
+
+  .agenda-innhold strong {
+    font-size: 0.95rem; color: var(--navy); display: block; margin-bottom: 0.2rem;
+  }
+
+  .agenda-innhold span {
+    font-size: 0.84rem; color: var(--tekst-lys);
+  }
+
+  .agenda-highlight .agenda-tid { background: var(--burgunder); }
+  .agenda-highlight .agenda-innhold { background: var(--rosa-lys); }
+
+  /* TILBAKEBLIKK */
+  .tilbakeblikk { background: var(--krem); }
+
+  .sitat-boks {
+    background: var(--rosa-lys);
+    border-left: 3px solid var(--farge);
+    padding: 1.4rem 1.8rem;
+    border-radius: 0 4px 4px 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 0.95rem;
+    color: var(--burgunder-mork); line-height: 1.6;
+    margin: 1.5rem 0;
+  }
+
+  .dimensjon-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.8rem;
+    margin-top: 2rem;
+  }
+
+  .dimensjon-kort {
+    background: var(--hvit);
+    border-top: 3px solid var(--burgunder);
+    border-radius: 3px;
+    padding: 1.2rem 1rem;
+  }
+
+  .dimensjon-kort:nth-child(2) { border-top-color: var(--navy); }
+  .dimensjon-kort:nth-child(3) { border-top-color: var(--gronn); }
+  .dimensjon-kort:nth-child(4) { border-top-color: #b07040; }
+  .dimensjon-kort:nth-child(5) { border-top-color: var(--farge); }
+
+  .dimensjon-kort h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.88rem; color: var(--navy);
+    margin-bottom: 0.5rem; line-height: 1.3;
+  }
+
+  .dimensjon-kort p {
+    font-size: 0.78rem; color: var(--tekst-lys); line-height: 1.5;
+  }
+
+  /* KAPITTELSEKSJON */
+  .kapittel { background: var(--hvit); }
+
+  .kapittel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .kapittel-kort {
+    background: var(--krem);
+    border-radius: 3px;
+    padding: 1.6rem;
+    border-left: 3px solid var(--farge);
+  }
+
+  .kapittel-kort:nth-child(2) { border-left-color: var(--burgunder); }
+  .kapittel-kort:nth-child(3) { border-left-color: var(--gronn); }
+  .kapittel-kort:nth-child(4) { border-left-color: #b07040; }
+
+  .kapittel-kort h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; color: var(--navy); margin-bottom: 0.6rem;
+  }
+
+  .kapittel-kort ul {
+    list-style: none; display: flex; flex-direction: column; gap: 0.4rem;
+  }
+
+  .kapittel-kort ul li {
+    font-size: 0.86rem; color: var(--tekst-lys);
+    padding-left: 1rem; position: relative; line-height: 1.5;
+  }
+
+  .kapittel-kort ul li::before {
+    content: '·'; position: absolute; left: 0;
+    color: var(--farge); font-weight: 700;
+  }
+
+  /* OPPGAVE */
+  .oppgave {
+    background: linear-gradient(135deg, var(--farge) 0%, #2a3a4a 100%);
+    color: var(--hvit);
+  }
+
+  .oppgave .section-label { color: rgba(255,255,255,0.6); }
+  .oppgave .section-title { color: var(--hvit); }
+  .oppgave .ingress { color: rgba(255,255,255,0.7); max-width: 680px; }
+
+  .oppgave-steg {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 3rem;
+  }
+
+  .oppgave-steg-kort {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 3px;
+    padding: 1.5rem;
+  }
+
+  .oppgave-steg-nr {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 700;
+    color: rgba(255,255,255,0.12); line-height: 1; margin-bottom: 0.5rem;
+  }
+
+  .oppgave-steg-kort h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; color: rgba(255,255,255,0.9); margin-bottom: 0.5rem;
+  }
+
+  .oppgave-steg-kort p {
+    font-size: 0.86rem; color: rgba(255,255,255,0.6); line-height: 1.6;
+  }
+
+  /* TASKCARDS EMBED */
+  .taskcards { background: var(--krem); }
+
+  .taskcards-wrap {
+    border-radius: 6px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    margin-top: 2rem;
+  }
+
+  .taskcards-wrap iframe {
+    display: block; width: 100%; border: none;
+  }
+
+  /* REFLEKSJON */
+  .refleksjon { background: var(--rosa); }
+  .refleksjon .section-label { color: var(--burgunder); }
+  .refleksjon .section-title { color: var(--burgunder-mork); }
+
+  .refleksjon-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 2rem;
+  }
+
+  .refleksjon-kort {
+    background: rgba(255,255,255,0.5);
+    border-radius: 3px; padding: 1.4rem 1.6rem;
+  }
+
+  .refleksjon-kort p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic; font-size: 0.95rem;
+    color: var(--burgunder-mork); line-height: 1.6;
+  }
+
+  footer {
+    background: var(--navy-lys); color: rgba(255,255,255,0.4);
+    text-align: center; padding: 2rem;
+    font-size: 0.78rem; letter-spacing: 0.06em;
+  }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes bounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(6px); } }
+  @keyframes float  { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
+
+  @media (max-width: 700px) {
+    .nav-links { display: none; }
+    .dimensjon-grid { grid-template-columns: 1fr 1fr; }
+    .kapittel-grid, .refleksjon-grid { grid-template-columns: 1fr; }
+    .oppgave-steg { grid-template-columns: 1fr; }
+    .agenda-grid { grid-template-columns: 90px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-inner">
+    <span class="nav-logo">DigBarnehage · 20. mai 2026</span>
+    <ul class="nav-links">
+      <li><a href="#agenda">Agenda</a></li>
+      <li><a href="#oppgave">Gruppeoppgave</a></li>
+      <li><a href="#planlegging">Planlegging</a></li>
+      <li><a href="#kapittel">Faglig grunnlag</a></li>
+    </ul>
+    <a href="index.html" class="nav-hjem" title="Til forsiden" style="text-decoration:none;color:var(--tekst-lys);display:flex;align-items:center;transition:color 0.2s;" onmouseover="this.style.color='var(--farge)'" onmouseout="this.style.color='var(--tekst-lys)'"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></a>
+    <a class="nav-tilbake" href="2026.html">← 2026</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-pattern"></div>
+  <div class="hero-diamonds">
+    <span class="hero-diamond">◆</span>
+    <span class="hero-diamond">◆</span>
+    <span class="hero-diamond">◆</span>
+  </div>
+  <div class="hero-content">
+    <p class="hero-kicker">DigBarnehage · Skaun Kommune & DMMH</p>
+    <div class="hero-dato">Onsdag 20. mai 2026</div>
+    <h1 class="hero-title">Sømløse overganger kropp og digitale rom</h1>
+    <p class="hero-sub">Kollektiv kompetanseutvikling på avdelingen</p>
+    <div class="hero-sporsmal">
+      «Hvordan utvikler vi kollektiv kompetanse i det samme rommet som barna – når fellestiden er knapp?»
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll for å utforske</span>
+      <span class="scroll-arrow">↓</span>
+    </div>
+  </div>
+</section>
+
+<!-- TILBAKEBLIKK -->
+<section class="tilbakeblikk" id="tilbakeblikk">
+  <div class="container">
+    <p class="section-label">Siden sist · Februar 2026</p>
+    <h2 class="section-title">Tilbakeblikk på fagdagen</h2>
+    <p class="ingress">Gå rundt og snakk med hverandre – hva husker du fra fagdagen i februar? Hva sitter igjen? Bruk de fem disiplinene som huskeliste.</p>
+
+    <div class="sitat-boks fade-in">
+      «Hva tenker du når du leser om Senges fem dimensjoner – gå aktivt inn i alle dimensjonene og tenk: hva betyr dette for meg og min rolle?»
+      <br><small style="font-style:normal; font-size:0.78rem; color:var(--tekst-lys); margin-top:0.4rem; display:block;">Forberedelse til fagdag 26. februar</small>
+    </div>
+
+    <p class="ingress" style="margin-bottom:1rem;">De fem disiplinene vi arbeidet med:</p>
+
+    <div class="dimensjon-grid fade-in">
+      <div class="dimensjon-kort">
+        <h4>Personlig mestring</h4>
+        <p>Individets ønske om personlig vekst og læring mot egne mål</p>
+      </div>
+      <div class="dimensjon-kort">
+        <h4>Mentale modeller</h4>
+        <p>Bevisstgjøring av dype forestillinger om hvordan verden fungerer</p>
+      </div>
+      <div class="dimensjon-kort">
+        <h4>Felles visjon</h4>
+        <p>Evnen til å skape et felles bilde av fremtiden man ønsker å skape sammen</p>
+      </div>
+      <div class="dimensjon-kort">
+        <h4>Gruppelæring</h4>
+        <p>Teamet som viktigste læringsenhet – å «tenke sammen»</p>
+      </div>
+      <div class="dimensjon-kort">
+        <h4>Systemtenkning</h4>
+        <p>Se helheten og forstå hvordan delene påvirker hverandre over tid</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENDA -->
+<section class="agenda" id="agenda">
+  <div class="container">
+    <p class="section-label">Program for dagen</p>
+    <h2 class="section-title">Agenda</h2>
+    <p class="ingress">Tema for dagen er sømløse overganger mellom kropp og digitale rom – med fokus på hvordan vi leder kollektiv kompetanseutvikling på avdelingsnivå.</p>
+
+    <div class="agenda-grid fade-in">
+      <div class="agenda-rad agenda-highlight">
+        <div class="agenda-tid">09:00–09:45</div>
+        <div class="agenda-innhold">
+          <strong>Hjemmeside REKOM · Gruppeoppgave</strong>
+          <span>Vi starter med TaskCards-tavlen – fyll inn hva du har erfart siden sist</span>
+        </div>
+      </div>
+      <div class="agenda-rad">
+        <div class="agenda-tid">10:00–10:45</div>
+        <div class="agenda-innhold">
+          <strong>Leire og fortelling – innramming av prosess</strong>
+          <span>Praktisk og skapende tilnærming til digital og analog fortelling</span>
+        </div>
+      </div>
+      <div class="agenda-rad" style="background:rgba(74,122,90,0.06);">
+        <div class="agenda-tid" style="background:var(--gronn);">Stoppunkt</div>
+        <div class="agenda-innhold">
+          <strong style="color:var(--gronn);">Refleksjon etter leiren</strong>
+          <span>Hva snakket dere om mens hendene var i arbeid?</span>
+        </div>
+      </div>
+      <div class="agenda-rad">
+        <div class="agenda-tid">11:00–11:45</div>
+        <div class="agenda-innhold">
+          <strong>Mulighetsrommet og veien videre</strong>
+          <span>Hva åpner seg når vi tenker digitalt og kroppslig sammen?</span>
+        </div>
+      </div>
+      <div class="agenda-rad">
+        <div class="agenda-tid">11:45–12:30</div>
+        <div class="agenda-innhold">
+          <strong>Lunsj</strong>
+        </div>
+      </div>
+      <div class="agenda-rad">
+        <div class="agenda-tid">12:30–15:00</div>
+        <div class="agenda-innhold">
+          <strong>Aktualisering av DigBhg opp mot de 5 disiplinene</strong>
+          <span>Plan for videre arbeid</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEIRE-REFLEKSJON -->
+<section style="background:var(--hvit); padding:4rem 2rem;" id="leire">
+  <div class="container">
+    <p class="section-label" style="color:var(--gronn);">10:45 · Stoppunkt</p>
+    <h2 class="section-title">Etter leiren – hva skjedde?</h2>
+    <p class="ingress">Mens dere jobbet med hendene, foregikk det noe annet også. Dette er ikke en oppsummering av leiren – det er en inngang til ettermiddagen.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:2rem;">
+
+      <div class="sitat-boks fade-in" style="margin:0; border-left-color:var(--gronn);">
+        <p style="font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gronn); margin-bottom:0.6rem; font-style:normal; opacity:0.8;">Refleksjonsspørsmål</p>
+        Hva snakket dere om mens hendene var i arbeid – og hva sier det om hvordan kollektiv læring kan skje uten at noen tar blikket fra det dere holder på med?
+      </div>
+
+      <div style="background:var(--krem); border-radius:3px; padding:1.4rem 1.6rem; border-top:3px solid var(--gronn);" class="fade-in">
+        <p style="font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gronn); margin-bottom:0.6rem;">Koblingen til kap. 4 og 5</p>
+        <p style="font-size:0.86rem; color:var(--tekst-lys); line-height:1.6;">Roland og Alvestad beskriver begge at kollektiv læring ikke krever et møterom. Den skjer side om side, i det praktiske – akkurat slik det skjer på avdelingen med barna til stede. Det dere nettopp opplevde, er mulig å iscenesette i hverdagen.</p>
+      </div>
+
+    </div>
+
+    <div style="margin-top:1.5rem; background:rgba(74,122,90,0.06); border:1px solid rgba(74,122,90,0.15); border-radius:3px; padding:1.2rem 1.6rem;" class="fade-in">
+      <p style="font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gronn); margin-bottom:0.5rem;">Ta med videre til ettermiddagen</p>
+      <p style="font-size:0.88rem; color:var(--tekst-lys); line-height:1.6; font-style:italic;">«Hvordan kan vi lage rom for denne typen samtaler i personalgruppen vår – uten at det krever ekstra tid?»</p>
+    </div>
+  </div>
+</section>
+
+<!-- TILBAKEBLIKK -->
+<!-- GRUPPEOPPGAVE -->
+<section class="oppgave" id="oppgave">
+  <div class="container">
+    <p class="section-label">09:00–09:45 · Kom i gang</p>
+    <h2 class="section-title">Gruppeoppgave</h2>
+    <p class="ingress">Gå tilbake til Senges fem disipliner fra februar. Nå er det tid for å fylle inn erfaringene fra hverdagen – hva har skjedd siden sist, og hva vil dere fremover?</p>
+
+    <div class="oppgave-steg fade-in">
+      <div class="oppgave-steg-kort">
+        <div class="oppgave-steg-nr">01</div>
+        <h3>Tilbakeblikk</h3>
+        <p>Hva har dere faktisk prøvd ut siden februar? Hva har fungert, og hva har vært utfordrende? Knytt dette til en eller flere av de fem disiplinene.</p>
+      </div>
+      <div class="oppgave-steg-kort">
+        <div class="oppgave-steg-nr">02</div>
+        <h3>Aktualisering</h3>
+        <p>Hvordan henger det dere har erfart sammen med det vi leste om kapasitetsbygging og profesjonelle læringsfellesskap? Hva kjenner dere igjen?</p>
+      </div>
+      <div class="oppgave-steg-kort">
+        <div class="oppgave-steg-nr">03</div>
+        <h3>Veien videre</h3>
+        <p>Hva vil dere gjøre fremover? Legg inn muligheter, barrierer og konkrete neste steg i tavlen nedenfor – én kolonne per disiplin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TASKCARDS -->
+<section class="taskcards" id="taskcards">
+  <div class="container">
+    <p class="section-label">Felles tavle · Fyll inn nå</p>
+    <h2 class="section-title">Senges fem disipliner – erfaringer fra hverdagen</h2>
+    <p class="ingress">Klikk på et kort i tavlen og legg inn det dere har erfart i din barnehage siden februar. Én kolonne per disiplin – muligheter, barrierer, hva dere gjør i dag og hva dere vil fremover.</p>
+
+    <div class="taskcards-wrap fade-in">
+      <iframe
+        src="https://ntnu.taskcards.app/#/board/2f47da74-5603-44eb-b124-6d729ecf2897?token=4c9f33fd-904c-4e55-8ee2-f5994872ab00"
+        style="border:0px; width:100%; height:620px;"
+        allowfullscreen="true"
+        webkitallowfullscreen="true"
+        mozallowfullscreen="true">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- LOKAL MATRISE -->
+<section class="taskcards" id="matrise" style="background:var(--hvit); padding-top:0;">
+  <div class="container" style="padding-top:5rem;">
+    <p class="section-label">Lokal dokumentasjon · Din barnehage</p>
+    <h2 class="section-title">Fyll inn for din enhet</h2>
+    <p class="ingress">Et arbeidsark for personalet – jobb gjerne i fellesskap. Klikk i en celle og skriv. Last ned som PDF når dere er ferdige.</p>
+
+    <div style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+      <button onclick="window.print()" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.55rem 1.2rem;border-radius:100px;font-size:0.78rem;font-weight:500;cursor:pointer;background:var(--farge);color:#fff;border:none;font-family:'DM Sans',sans-serif;letter-spacing:0.02em;">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 9v2h9V9M6.5 1v7M4 6l2.5 2.5L9 6"/></svg>
+        Last ned som PDF
+      </button>
+      <button onclick="nullstillMatrise()" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.55rem 1.2rem;border-radius:100px;font-size:0.78rem;font-weight:500;cursor:pointer;background:transparent;color:var(--tekst-lys);border:1px solid rgba(58,90,106,0.25);font-family:'DM Sans',sans-serif;">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6.5A4.5 4.5 0 1 0 6.5 2M2 2v4h4"/></svg>
+        Nullstill
+      </button>
+    </div>
+
+    <div style="display:flex;gap:1.2rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.75rem;color:var(--tekst-lys);">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--gronn);"></div>
+        Utfylte celler får grønn kant
+      </div>
+      <div style="display:flex;align-items:center;gap:0.4rem;font-size:0.75rem;color:var(--tekst-lys);">
+        <div style="width:10px;height:10px;border-radius:50%;background:rgba(58,90,106,0.15);border:1px solid var(--farge);"></div>
+        Klikk i celle for å skrive fritt
+      </div>
+    </div>
+
+    <div style="border-radius:8px;overflow:hidden;border:1px solid rgba(58,90,106,0.18);">
+      <table id="senge-matrise" style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="background:var(--navy);color:rgba(255,255,255,0.5);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-right:1px solid rgba(255,255,255,0.08);min-width:140px;">Kategori</th>
+            <th style="background:var(--navy);color:var(--rosa-lys);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-right:1px solid rgba(255,255,255,0.08);border-bottom:2px solid var(--burgunder);">Personlig mestring</th>
+            <th style="background:var(--navy);color:var(--rosa-lys);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-right:1px solid rgba(255,255,255,0.08);border-bottom:2px solid var(--navy-lys);">Mentale modeller</th>
+            <th style="background:var(--navy);color:var(--rosa-lys);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-right:1px solid rgba(255,255,255,0.08);border-bottom:2px solid var(--gronn);">Felles visjon</th>
+            <th style="background:var(--navy);color:var(--rosa-lys);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-right:1px solid rgba(255,255,255,0.08);border-bottom:2px solid #b07040;">Gruppelæring</th>
+            <th style="background:var(--navy);color:var(--rosa-lys);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-bottom:2px solid var(--farge);">Systemtenkning</th>
+          </tr>
+        </thead>
+        <tbody id="senge-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+  </div>
+</section>
+
+
+
+<!-- KAPITTEL 4 -->
+<section class="kapittel" id="kapittel">
+  <div class="container">
+    <p class="section-label">Faglig grunnlag · Roland, kap. 4</p>
+    <h2 class="section-title">Ledelseskompetanse: å lede utviklingsprosesser</h2>
+    <p class="ingress">Kapittel 4 handler om hvordan ledere i barnehagen kan drive endringsprosesser som bygger kapasitet hos personalet – særlig relevant når fellestiden er begrenset.</p>
+
+    <div class="kapittel-grid">
+      <div class="kapittel-kort fade-in">
+        <h3>Endringsfasene</h3>
+        <ul>
+          <li>Initiering – forankre og informere om kjernekomponenter</li>
+          <li>Implementering – omsette teorier og strukturer i praksis</li>
+          <li>Videreføring – fortsette arbeidet utover den formelle endringsfasen</li>
+        </ul>
+      </div>
+      <div class="kapittel-kort fade-in">
+        <h3>Transformasjonsledelse</h3>
+        <ul>
+          <li>Sette retningen – skape klarhet, visjon og forpliktelse</li>
+          <li>Stimulere de ansattes læring – rollemodell og faglig utvikling</li>
+          <li>Endre organisasjonen – bygge samarbeid på tvers av avdelinger</li>
+          <li>Lede intervensjoner – bemanne og følge opp endringen</li>
+        </ul>
+      </div>
+      <div class="kapittel-kort fade-in">
+        <h3>Kapasitetsbygging</h3>
+        <ul>
+          <li>Kompetanse, motivasjon og verdier på individuelt og kollektivt nivå</li>
+          <li>Generell kapasitet (god ledelse, tydelige strukturer, felles visjon)</li>
+          <li>Innovasjonsspesifikk kapasitet knyttet til den konkrete intervensjonen</li>
+        </ul>
+      </div>
+      <div class="kapittel-kort fade-in">
+        <h3>Profesjonelle læringsfellesskap</h3>
+        <ul>
+          <li>Kollektiv orientering – deling, granskende holdning, refleksjon</li>
+          <li>IGP-prosesser: individ → gruppe → plenum</li>
+          <li>Deprivatisering av praksis og stimulering av nye ideer</li>
+          <li>Særlig egnet i barnehagesektoren (Thornton & Cherrington, 2019)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sitat-boks fade-in" style="margin-top:2rem; border-left-color:var(--burgunder);">
+      En utfordring når det gjelder bærekraftig utvikling, systematikk og kontinuerlig arbeid, er de begrensede fellestidsressursene som barnehagene har til å drive utviklingsarbeid.
+      <br><small style="font-style:normal; font-size:0.78rem; color:var(--tekst-lys); margin-top:0.4rem; display:block;">Roland, kap. 4</small>
+    </div>
+  </div>
+</section>
+
+<!-- PLANLEGGINGSOPPGAVE -->
+<section style="background:var(--navy); padding:5rem 2rem;" id="planlegging">
+  <div class="container">
+    <p class="section-label" style="color:rgba(255,255,255,0.5);">12:30–15:00 · Gruppearbeid</p>
+    <h2 class="section-title" style="color:var(--hvit);">Planlegging for barnehageåret 2026/2027</h2>
+    <p class="ingress" style="color:rgba(255,255,255,0.65); max-width:680px;">
+      Ingen fremlegg – dere jobber selv. To og to diskuterer ett tema, presenterer kort for hverandre, og fyller inn i en felles tavle. Målet er å gå hjem med en konkret plan for hvordan kompetanseutvikling skjer på avdelingen, på huset og i nettverket neste år.
+    </p>
+
+    <!-- TRE FASER -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:1rem; margin-bottom:3rem;" class="fade-in">
+
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-top:3px solid var(--rosa); border-radius:3px; padding:1.8rem;">
+        <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:rgba(255,255,255,0.1); line-height:1; margin-bottom:0.5rem;">01</div>
+        <h3 style="font-family:'Playfair Display',serif; font-size:1rem; color:rgba(255,255,255,0.9); margin-bottom:0.5rem;">Par diskuterer</h3>
+        <p style="font-size:0.84rem; color:rgba(255,255,255,0.55); line-height:1.6;">Ca. 20 min. Tre par jobber med hvert sitt tema. Les spørsmålene under, diskuter og noter.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-top:3px solid var(--rosa); border-radius:3px; padding:1.8rem;">
+        <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:rgba(255,255,255,0.1); line-height:1; margin-bottom:0.5rem;">02</div>
+        <h3 style="font-family:'Playfair Display',serif; font-size:1rem; color:rgba(255,255,255,0.9); margin-bottom:0.5rem;">Del med de andre</h3>
+        <p style="font-size:0.84rem; color:rgba(255,255,255,0.55); line-height:1.6;">Ca. 15 min. Hvert par presenterer 3–4 min. De andre kan legge til eller utfordre.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-top:3px solid var(--rosa); border-radius:3px; padding:1.8rem;">
+        <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:rgba(255,255,255,0.1); line-height:1; margin-bottom:0.5rem;">03</div>
+        <h3 style="font-family:'Playfair Display',serif; font-size:1rem; color:rgba(255,255,255,0.9); margin-bottom:0.5rem;">Alle seks – plenum</h3>
+        <p style="font-size:0.84rem; color:rgba(255,255,255,0.55); line-height:1.6;">Ca. 20 min. Felles diskusjon om krysspresset mellom foreldrepress og rammeplanen.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-top:3px solid var(--rosa); border-radius:3px; padding:1.8rem;">
+        <div style="font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:rgba(255,255,255,0.1); line-height:1; margin-bottom:0.5rem;">04</div>
+        <h3 style="font-family:'Playfair Display',serif; font-size:1rem; color:rgba(255,255,255,0.9); margin-bottom:0.5rem;">Fyll inn i tavlen</h3>
+        <p style="font-size:0.84rem; color:rgba(255,255,255,0.55); line-height:1.6;">Ca. 15 min. Skriv inn det dere kom frem til i TaskCards-tavlen – én rad per barnehage.</p>
+      </div>
+
+    </div>
+
+    <!-- FIRE TEMAER FOR PARVIS DISKUSJON -->
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.2rem; color:rgba(255,255,255,0.7); margin-bottom:1.2rem; letter-spacing:0.02em;">Diskusjonstemaer – ett per par</h3>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-bottom:1rem;" class="fade-in">
+
+      <!-- Par A -->
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-left:3px solid var(--gronn); border-radius:3px; padding:1.6rem;">
+        <div style="font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gronn); margin-bottom:0.6rem; font-weight:500;">Par A · På avdelingen</div>
+        <h4 style="font-family:'Playfair Display',serif; font-size:1rem; color:rgba(255,255,255,0.9); margin-bottom:0.8rem;">Kollegaveiledning og hverdagslæring</h4>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1.2rem;">
+          <li style="font-size:0.84rem; color:rgba(255,255,255,0.6); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:var(--gronn);">→</span> Hvem veileder hvem på avdelingen – og hva ser de etter?</li>
+          <li style="font-size:0.84rem; color:rgba(255,255,255,0.6); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:var(--gronn);">→</span> Hvilken kjernekomponent fra DigBarnehage observerer vi i arbeidet med barna?</li>
+          <li style="font-size:0.84rem; color:rgba(255,255,255,0.6); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:var(--gronn);">→</span> Når og hvordan reflekterer vi etterpå – uten at det krever ekstra fellestid?</li>
+        </ul>
+        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:1rem; display:flex; flex-direction:column; gap:0.6rem;">
+          <p style="font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(100,180,130,0.7);">Fra Roland kap. 4 og Alvestad kap. 5</p>
+          <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:0.82rem; color:rgba(255,255,255,0.4); line-height:1.6;">«Trening kan handle om å gjennomføre IGP-prosesser: individ – gruppe – plenum, kollegaveiledning, lesing av fagstoff med påfølgende refleksjonsrunder. Slike prosesser må utledes fra kjernekomponentene og organiseres systematisk over tid.»</p>
+          <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:0.82rem; color:rgba(255,255,255,0.4); line-height:1.6;">«Dersom personalet ikke deltar i det lokale planarbeidet, kan det resultere i en form for privatpraksis basert på enkeltpersoners egne erfaringer, vaner og tradisjoner.»</p>
+        </div>
+      </div>
+
+      <!-- Par B -->
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-left:3px solid #b07040; border-radius:3px; padding:1.6rem;">
+        <div style="font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:#b07040; margin-bottom:0.6rem; font-weight:500;">Par B · På huset</div>
+        <h4 style="font-family:'Playfair Display',serif; font-size:1rem; color:rgba(255,255,255,0.9); margin-bottom:0.8rem;">IGP og erfaringsdeling på tvers</h4>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1.2rem;">
+          <li style="font-size:0.84rem; color:rgba(255,255,255,0.6); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:#b07040;">→</span> Hvilke arenaer bruker vi for å dele erfaringer på tvers av avdelinger?</li>
+          <li style="font-size:0.84rem; color:rgba(255,255,255,0.6); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:#b07040;">→</span> Hvem leder IGP-prosessene – styrer, pedagogisk leder eller ressursperson?</li>
+          <li style="font-size:0.84rem; color:rgba(255,255,255,0.6); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:#b07040;">→</span> Hvordan sikrer vi at alle ansatte – ikke bare pedagogene – er med i læringen?</li>
+        </ul>
+        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:1rem; display:flex; flex-direction:column; gap:0.6rem;">
+          <p style="font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(180,140,80,0.7);">Fra Roland kap. 4 og Alvestad kap. 5</p>
+          <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:0.82rem; color:rgba(255,255,255,0.4); line-height:1.6;">«Et hovedpoeng her er å skape stor grad av samarbeidsprosesser i barnehagen. Samarbeid bør utvikles på et kollektivt nivå – da blir kraften i endringen mye sterkere.»</p>
+          <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:0.82rem; color:rgba(255,255,255,0.4); line-height:1.6;">«Deltakelse i planarbeidet fra hele barnehagepersonalet er av stor betydning for at planene også skal bli iverksatt i praksis. Uten involvering får personalet ikke eierforhold til det, og heller ikke det samme engasjementet.»</p>
+        </div>
+      </div>
+
+      <!-- Par C -->
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-left:3px solid var(--farge); border-radius:3px; padding:1.6rem;">
+        <div style="font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(100,160,180,0.9); margin-bottom:0.6rem; font-weight:500;">Par C · Føringer og forankring</div>
+        <h4 style="font-family:'Playfair Display',serif; font-size:1rem; color:rgba(255,255,255,0.9); margin-bottom:0.8rem;">Rammeplan, kommunale planer og distribuert ansvar</h4>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1.2rem;">
+          <li style="font-size:0.84rem; color:rgba(255,255,255,0.6); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:rgba(100,160,180,0.9);">→</span> Hvilke nasjonale og kommunale føringer skal forankre arbeidet vårt i 2026/2027?</li>
+          <li style="font-size:0.84rem; color:rgba(255,255,255,0.6); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:rgba(100,160,180,0.9);">→</span> Hvem har ansvar for å holde koblingen til rammeplanen levende i personalet?</li>
+          <li style="font-size:0.84rem; color:rgba(255,255,255,0.6); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:rgba(100,160,180,0.9);">→</span> Hvordan fordeler vi ledelsesansvar slik at det ikke hviler på styreren alene?</li>
+        </ul>
+        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:1rem; display:flex; flex-direction:column; gap:0.6rem;">
+          <p style="font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(100,160,180,0.7);">Fra Roland kap. 4 og Alvestad kap. 5</p>
+          <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:0.82rem; color:rgba(255,255,255,0.4); line-height:1.6;">«Det er en rekke føringer både nasjonale og regionalt. Barnehagene skal drive sin virksomhet i tråd med disse politiske og pedagogiske strømningene som pågår kontinuerlig.»</p>
+          <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:0.82rem; color:rgba(255,255,255,0.4); line-height:1.6;">«Distribuert ledelse betyr blant annet at makt og ledelsesansvar fordeles på en god måte ut i organisasjonen. Gjennom dette får ledelsen mer å spille på og større mulighet til å påvirke hele barnehagen.»</p>
+          <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:0.82rem; color:rgba(255,255,255,0.4); line-height:1.6;">«Når rammeplanen ses som et styringsinstrument, kan dette bidra til å synliggjøre faglighet og fremme utvikling av kvalitet. Når den refereres til som en bakgrunn, knyttes den i mindre grad til personalets egne fortolkninger og de lokale forholdene.»</p>
+        </div>
+      </div>
+
+      <!-- Plenum -->
+      <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-left:3px solid var(--rosa); border-radius:3px; padding:1.6rem; grid-column:1/-1; margin-top:0.5rem;">
+        <div style="font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--rosa); margin-bottom:0.6rem; font-weight:500;">Alle seks · Plenumsdiskusjon</div>
+        <h4 style="font-family:'Playfair Display',serif; font-size:1rem; color:rgba(255,255,255,0.9); margin-bottom:1.2rem;">Skjermtid, foreldresamarbeid og det å stå i krysspresset</h4>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+
+          <div style="border-right:1px solid rgba(255,255,255,0.08); padding-right:1.5rem;">
+            <p style="font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rosa); margin-bottom:0.8rem; opacity:0.8;">Del 1 · Faglig avklaring (~10 min)</p>
+            <p style="font-size:0.84rem; color:rgba(255,255,255,0.65); line-height:1.6; margin-bottom:0.8rem;">Før dere kan kommunisere praksisen deres utad, må dere være faglig trygge innad. Start her:</p>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
+              <li style="font-size:0.84rem; color:rgba(255,255,255,0.55); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:var(--rosa);">→</span> Hva er vår felles definisjon av pedagogisk bruk av digitale verktøy – og hva er det <em>ikke</em>?</li>
+              <li style="font-size:0.84rem; color:rgba(255,255,255,0.55); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:var(--rosa);">→</span> Hva er forskjellen på passiv skjermtid og aktiv, skapende bruk – og klarer alle i personalet å forklare den?</li>
+              <li style="font-size:0.84rem; color:rgba(255,255,255,0.55); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:var(--rosa);">→</span> Skal vi alltid følge rammeplanen, eller er det rom for profesjonelt skjønn når lokal kontekst og nasjonale krav peker i ulike retninger?</li>
+            </ul>
+          </div>
+
+          <div>
+            <p style="font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--rosa); margin-bottom:0.8rem; opacity:0.8;">Del 2 · Foreldresamarbeid (~10 min)</p>
+            <p style="font-size:0.84rem; color:rgba(255,255,255,0.65); line-height:1.6; margin-bottom:0.8rem;">Når personalet er faglig trygge, kan de møte foreldrenes bekymringer uten å bli defensive:</p>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:0.5rem;">
+              <li style="font-size:0.84rem; color:rgba(255,255,255,0.55); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:var(--rosa);">→</span> Hva trenger personalet for å stå trygt i møte med foreldre som er skeptiske til digital bruk?</li>
+              <li style="font-size:0.84rem; color:rgba(255,255,255,0.55); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:var(--rosa);">→</span> Hvordan kommuniserer vi vår digitale praksis på en måte som bygger tillit fremfor konflikt – i foreldremøter, på samtaler, i hverdagen?</li>
+              <li style="font-size:0.84rem; color:rgba(255,255,255,0.55); padding-left:1rem; position:relative; line-height:1.5;"><span style="position:absolute;left:0;color:var(--rosa);">→</span> Hva er én konkret ting vi kan gjøre i 2026/2027 for å involvere foreldre i den digitale praksisen vår – ikke bare informere dem?</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FELLES TASKCARDS TAVLE -->
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.2rem; color:rgba(255,255,255,0.7); margin-bottom:0.5rem;">Felles planleggingstavle</h3>
+    <p style="font-size:0.88rem; color:rgba(255,255,255,0.45); margin-bottom:1.5rem; max-width:620px;">Etter presentasjonsrunden fyller dere inn i tavlen – én kolonne per tema (avdeling / hus / føringer / dilemma), én rad per barnehage. Dette blir den felles planen dere tar med hjem.</p>
+
+    <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:4px; overflow:hidden;" class="fade-in">
+      <iframe src="https://ntnu.taskcards.app/#/board/f7458f1a-c88c-43e3-b008-9fb1af4e0286?token=f6a244fb-4e06-4702-bf00-89094cc314ab" style="border:0px;width:100%;height:560px;" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+    </div>
+
+  </div>
+</section>
+
+<!-- LOKAL PLANLEGGINGSMATRISE -->
+<section style="background:var(--krem); padding:5rem 2rem;" id="planlegging-lokalt">
+  <div class="container">
+    <p class="section-label">Lokal dokumentasjon · Ta med hjem</p>
+    <h2 class="section-title">Planlegging for din barnehage 2026/2027</h2>
+    <p class="ingress">Fyll inn for din enhet – hva ble dere enige om i dag? Ta dette med tilbake til personalet. Last ned som PDF når dere er ferdige.</p>
+
+    <div style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+      <button onclick="window.print()" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.55rem 1.2rem;border-radius:100px;font-size:0.78rem;font-weight:500;cursor:pointer;background:var(--farge);color:#fff;border:none;font-family:'DM Sans',sans-serif;">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 9v2h9V9M6.5 1v7M4 6l2.5 2.5L9 6"/></svg>
+        Last ned som PDF
+      </button>
+      <button onclick="nullstillPlan()" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.55rem 1.2rem;border-radius:100px;font-size:0.78rem;font-weight:500;cursor:pointer;background:transparent;color:var(--tekst-lys);border:1px solid rgba(58,90,106,0.25);font-family:'DM Sans',sans-serif;">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6.5A4.5 4.5 0 1 0 6.5 2M2 2v4h4"/></svg>
+        Nullstill
+      </button>
+    </div>
+
+    <div style="border-radius:8px; overflow:hidden; border:1px solid rgba(58,90,106,0.18);">
+      <table id="plan-matrise" style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="background:var(--navy);color:rgba(255,255,255,0.5);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-right:1px solid rgba(255,255,255,0.08);min-width:160px;">Spørsmål</th>
+            <th style="background:var(--navy);color:var(--rosa-lys);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-right:1px solid rgba(255,255,255,0.08);border-bottom:2px solid var(--gronn);">På avdelingen</th>
+            <th style="background:var(--navy);color:var(--rosa-lys);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-right:1px solid rgba(255,255,255,0.08);border-bottom:2px solid #b07040;">På huset</th>
+            <th style="background:var(--navy);color:var(--rosa-lys);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-right:1px solid rgba(255,255,255,0.08);border-bottom:2px solid var(--farge);">Føringer og forankring</th>
+            <th style="background:var(--navy);color:var(--rosa-lys);font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem 1.1rem;text-align:left;border-bottom:2px solid var(--rosa);">Dilemmaet</th>
+          </tr>
+        </thead>
+        <tbody id="plan-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- REFLEKSJON -->
+<section class="refleksjon" id="refleksjon">
+  <div class="container">
+    <p class="section-label">Stoppunkt</p>
+    <h2 class="section-title">Refleksjonsspørsmål</h2>
+    <div class="refleksjon-grid">
+      <div class="refleksjon-kort fade-in">
+        <p>Hvordan kan vi som ledergruppe legge til rette for kollektiv kompetanseutvikling – på avdelingen, i hverdagen, med barna til stede?</p>
+      </div>
+      <div class="refleksjon-kort fade-in">
+        <p>Hva er de viktigste barrierene for profesjonelle læringsfellesskap i vår barnehage – og hva kan vi gjøre med dem?</p>
+      </div>
+      <div class="refleksjon-kort fade-in">
+        <p>Hvilken av Senges fem disipliner opplever du som mest relevant for det arbeidet vi holder på med nå?</p>
+      </div>
+      <div class="refleksjon-kort fade-in">
+        <p>Hva er ett konkret grep du vil ta med tilbake til din enhet etter denne samlingen?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  DigBarnehage · Skaun Kommune &amp; DMMH · Fagdag 20. mai 2026
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY, m = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('progress').style.width = (s/m*100) + '%';
+  });
+
+  const obs = new IntersectionObserver(e => e.forEach(x => {
+    if (x.isIntersecting) x.target.classList.add('synlig');
+  }), { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  // ── SENGE MATRISE ──
+  const rader = [
+    { id: 'muligheter', label: 'Muligheter',         placeholders: {
+      'personlig-mestring': 'Hva åpner opp for personlig mestring hos oss?',
+      'mentale-modeller':   'Hva åpner opp for å utfordre mentale modeller hos oss?',
+      'felles-visjon':      'Hva åpner opp for en felles visjon hos oss?',
+      'gruppelæring':       'Hva åpner opp for gruppelæring hos oss?',
+      'systemtenkning':     'Hva åpner opp for systemtenkning hos oss?',
+    }},
+    { id: 'barrierer', label: 'Barrierer',            placeholders: {
+      'personlig-mestring': 'Hva hindrer personlig mestring hos oss?',
+      'mentale-modeller':   'Hva hindrer oss i å utfordre mentale modeller?',
+      'felles-visjon':      'Hva hindrer en felles visjon hos oss?',
+      'gruppelæring':       'Hva hindrer gruppelæring hos oss?',
+      'systemtenkning':     'Hva hindrer systemtenkning hos oss?',
+    }},
+    { id: 'idag', label: 'Dette gjør vi i dag',       placeholders: {
+      'personlig-mestring': 'Hvordan jobber vi med personlig mestring i dag?',
+      'mentale-modeller':   'Hvordan utfordrer vi mentale modeller i dag?',
+      'felles-visjon':      'Hvordan jobber vi med felles visjon i dag?',
+      'gruppelæring':       'Hvordan jobber vi med gruppelæring i dag?',
+      'systemtenkning':     'Hvordan tenker vi systemisk i dag?',
+    }},
+    { id: 'viviil', label: 'Dette vil vi',            placeholders: {
+      'personlig-mestring': 'Hva vil vi gjøre for å styrke personlig mestring?',
+      'mentale-modeller':   'Hva vil vi gjøre for å utfordre mentale modeller?',
+      'felles-visjon':      'Hva vil vi gjøre for å styrke felles visjon?',
+      'gruppelæring':       'Hva vil vi gjøre for å styrke gruppelæringen?',
+      'systemtenkning':     'Hva vil vi gjøre for å tenke mer systemisk?',
+    }},
+  ];
+
+  const kolonner = ['personlig-mestring','mentale-modeller','felles-visjon','gruppelæring','systemtenkning'];
+
+  const tbody = document.getElementById('senge-tbody');
+
+  rader.forEach((rad, ri) => {
+    const tr = document.createElement('tr');
+    tr.style.background = ri % 2 === 0 ? 'var(--hvit)' : 'var(--krem)';
+
+    // Rad-etikett
+    const labelTd = document.createElement('td');
+    labelTd.style.cssText = 'padding:0.9rem 1.1rem;font-size:0.78rem;font-weight:500;color:var(--navy);border-right:1px solid rgba(58,90,106,0.12);border-bottom:1px solid rgba(58,90,106,0.1);vertical-align:middle;';
+    labelTd.textContent = rad.label;
+    tr.appendChild(labelTd);
+
+    kolonner.forEach(kol => {
+      const cellId = `m-${ri}-${kol}`;
+      const td = document.createElement('td');
+      td.className = 'matrise-celle';
+      td.style.cssText = 'padding:0;border-right:1px solid rgba(58,90,106,0.1);border-bottom:1px solid rgba(58,90,106,0.1);vertical-align:top;min-height:80px;position:relative;';
+      td.dataset.id = cellId;
+
+      const inner = document.createElement('div');
+      inner.style.cssText = 'min-height:80px;padding:0.6rem 0.7rem;';
+
+      const ta = document.createElement('textarea');
+      ta.id = cellId;
+      ta.rows = 3;
+      ta.placeholder = rad.placeholders[kol];
+      ta.style.cssText = 'width:100%;min-height:64px;border:none;background:transparent;font-family:"DM Sans",sans-serif;font-size:0.82rem;font-weight:400;color:var(--tekst);line-height:1.5;resize:none;outline:none;padding:0;';
+      ta.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+        if (this.value.trim()) {
+          td.style.borderLeft = '2.5px solid var(--gronn)';
+        } else {
+          td.style.borderLeft = '';
+        }
+      });
+
+      inner.appendChild(ta);
+      td.appendChild(inner);
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  function nullstillMatrise() {
+    if (!confirm('Nullstill alle celler i den lokale matrisen?')) return;
+    document.querySelectorAll('.matrise-celle textarea').forEach(ta => {
+      ta.value = '';
+      ta.style.height = 'auto';
+      ta.closest('.matrise-celle').style.borderLeft = '';
+    });
+  }
+
+  // ── PLANLEGGINGSMATRISE ──
+  const planRader = [
+    { label: 'Hva gjør vi konkret?', placeholders: {
+      'avdeling':   'Hvem veileder hvem? Hva ser de etter?',
+      'hus':        'Hvilke arenaer bruker vi? Hvem leder?',
+      'forankring': 'Hvilke føringer forankrer vi arbeidet i?',
+      'dilemma':    'Vår definisjon: hva er pedagogisk bruk vs. skjermtid?',
+    }},
+    { label: 'Hvem har ansvar?', placeholders: {
+      'avdeling':   'Hvem koordinerer kollegaveiledningen på avdelingen?',
+      'hus':        'Hvem leder IGP og erfaringsdeling på tvers?',
+      'forankring': 'Hvem holder koblingen til rammeplanen levende?',
+      'dilemma':    'Hva trenger personalet for å stå trygt mot foreldre?',
+    }},
+    { label: 'Når skjer det?', placeholders: {
+      'avdeling':   'Når og hvordan reflekterer vi uten ekstra fellestid?',
+      'hus':        'Hvilke møter/arenaer bruker vi – og hvor ofte?',
+      'forankring': 'Hvordan fordeler vi ledelsesansvar ut i organisasjonen?',
+      'dilemma':    'Konkret tiltak: hvordan involverer vi foreldre i 2026/2027?',
+    }},
+  ];
+
+  const planKolonner = ['avdeling','hus','forankring','dilemma'];
+  const planTbody = document.getElementById('plan-tbody');
+
+  planRader.forEach((rad, ri) => {
+    const tr = document.createElement('tr');
+    tr.style.background = ri % 2 === 0 ? 'var(--hvit)' : 'var(--krem)';
+
+    const labelTd = document.createElement('td');
+    labelTd.style.cssText = 'padding:0.9rem 1.1rem;font-size:0.78rem;font-weight:500;color:var(--navy);border-right:1px solid rgba(58,90,106,0.12);border-bottom:1px solid rgba(58,90,106,0.1);vertical-align:middle;line-height:1.4;';
+    labelTd.textContent = rad.label;
+    tr.appendChild(labelTd);
+
+    planKolonner.forEach(kol => {
+      const cellId = `p-${ri}-${kol}`;
+      const td = document.createElement('td');
+      td.className = 'plan-celle';
+      td.style.cssText = 'padding:0;border-right:1px solid rgba(58,90,106,0.1);border-bottom:1px solid rgba(58,90,106,0.1);vertical-align:top;min-height:80px;';
+
+      const inner = document.createElement('div');
+      inner.style.cssText = 'min-height:80px;padding:0.6rem 0.7rem;';
+
+      const ta = document.createElement('textarea');
+      ta.id = cellId;
+      ta.rows = 3;
+      ta.placeholder = rad.placeholders[kol];
+      ta.style.cssText = 'width:100%;min-height:64px;border:none;background:transparent;font-family:"DM Sans",sans-serif;font-size:0.82rem;font-weight:400;color:var(--tekst);line-height:1.5;resize:none;outline:none;padding:0;';
+      ta.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+        td.style.borderLeft = this.value.trim() ? '2.5px solid var(--gronn)' : '';
+      });
+
+      inner.appendChild(ta);
+      td.appendChild(inner);
+      tr.appendChild(td);
+    });
+
+    planTbody.appendChild(tr);
+  });
+
+  function nullstillPlan() {
+    if (!confirm('Nullstill planleggingsmatrisen?')) return;
+    document.querySelectorAll('.plan-celle textarea').forEach(ta => {
+      ta.value = '';
+      ta.style.height = 'auto';
+      ta.closest('.plan-celle').style.borderLeft = '';
+    });
+  }
+</script>
+</body>
+</html>
