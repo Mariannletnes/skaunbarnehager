@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kjøreplan · 20. mai 2026 · DigBarnehage</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --burgunder: #7a3a4a;
+    --burgunder-mork: #5a2535;
+    --navy: #1a2a4a;
+    --krem: #f7f0ee;
+    --rosa-lys: #f2dada;
+    --gronn: #4a7a5a;
+    --oker: #b07040;
+    --farge: #3a5a6a;
+    --tekst: #2d1e25;
+    --tekst-lys: #5a4a52;
+    --hvit: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--krem);
+    color: var(--tekst);
+    min-height: 100vh;
+    padding: 3rem 2rem;
+  }
+
+  .side {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--burgunder);
+  }
+
+  .header-venstre h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
+  }
+
+  .header-venstre p {
+    font-size: 0.85rem;
+    color: var(--tekst-lys);
+  }
+
+  .header-hoyre {
+    text-align: right;
+  }
+
+  .dato-stor {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--burgunder);
+    line-height: 1;
+  }
+
+  .dato-liten {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--tekst-lys);
+    margin-top: 0.2rem;
+  }
+
+  /* ØKTBLOKKER */
+  .okt {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .okt-tid {
+    background: var(--navy);
+    color: rgba(255,255,255,0.85);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 1rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+  }
+
+  .okt-innhold {
+    background: var(--hvit);
+    padding: 0.9rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 4px solid var(--burgunder);
+  }
+
+  .okt-tittel {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 0.2rem;
+    line-height: 1.3;
+  }
+
+  .okt-detalj {
+    font-size: 0.78rem;
+    color: var(--tekst-lys);
+    line-height: 1.5;
+  }
+
+  .okt-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.4rem;
+  }
+
+  .okt-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--rosa-lys);
+    color: var(--burgunder);
+    padding: 0.12rem 0.45rem;
+    border-radius: 2px;
+  }
+
+  /* Fargekoding per type */
+  .type-start     .okt-innhold { border-left-color: var(--burgunder); }
+  .type-leire     .okt-innhold { border-left-color: var(--gronn); }
+  .type-stoppunkt .okt-innhold { border-left-color: var(--gronn); background: rgba(74,122,90,0.05); }
+  .type-mulig     .okt-innhold { border-left-color: var(--farge); }
+  .type-pause     .okt-innhold { border-left-color: rgba(90,74,82,0.2); background: var(--krem); }
+  .type-planlegg  .okt-innhold { border-left-color: var(--navy); }
+  .type-plenum    .okt-innhold { border-left-color: #c07050; }
+  .type-taskcards .okt-innhold { border-left-color: var(--oker); }
+  .type-avslut    .okt-innhold { border-left-color: var(--burgunder-mork); }
+
+  .type-stoppunkt .okt-tid { background: var(--gronn); }
+  .type-plenum    .okt-tid { background: #7a4a3a; }
+
+  /* SEKSJONSOVERSKRIFT */
+  .seksjon-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tekst-lys);
+    margin: 1.8rem 0 0.6rem;
+    padding-left: 90px;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid rgba(90,74,82,0.12);
+  }
+
+  /* FORKLARING */
+  .forklaring {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(90,74,82,0.15);
+  }
+
+  .fork-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    color: var(--tekst-lys);
+  }
+
+  .fork-stripe {
+    width: 14px;
+    height: 3px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* PRINT */
+  @media print {
+    body { background: white; padding: 1.5rem; }
+    .okt-innhold { background: white !important; }
+    .type-pause .okt-innhold { background: #f9f9f9 !important; }
+    .type-stoppunkt .okt-innhold { background: #f0f7f2 !important; }
+    .print-knapp { display: none; }
+  }
+
+  .print-knapp {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--burgunder);
+    color: white;
+    border: none;
+    border-radius: 100px;
+    padding: 0.6rem 1.3rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    box-shadow: 0 4px 16px rgba(122,58,74,0.25);
+    transition: background 0.2s;
+  }
+  .print-knapp:hover { background: var(--burgunder-mork); }
+</style>
+</head>
+<body>
+
+<div class="side">
+
+  <div class="header">
+    <div class="header-venstre">
+      <h1>Kjøreplan for dagen</h1>
+      <p>DigBarnehage · Skaun Kommune &amp; DMMH · Samling styrere og ressurspersoner</p>
+    </div>
+    <div class="header-hoyre">
+      <div class="dato-stor">20. mai</div>
+      <div class="dato-liten">Onsdag 2026</div>
+    </div>
+  </div>
+
+  <!-- FORMIDDAG -->
+  <div class="seksjon-label">Formiddag</div>
+
+  <div class="okt type-start">
+    <div class="okt-tid">09:00<br>09:45</div>
+    <div class="okt-innhold">
+      <div class="okt-tittel">Tilbakeblikk og oppvarming</div>
+      <div class="okt-detalj">Gå rundt og snakk med hverandre – hva husker du fra fagdagen i februar? Deretter: fyll inn Senge-tavlen i TaskCards med erfaringer siden sist.</div>
+      <div class="okt-tags">
+        <span class="okt-tag">Senges disipliner</span>
+        <span class="okt-tag">TaskCards</span>
+        <span class="okt-tag">Erfaringsdeling</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="okt type-leire">
+    <div class="okt-tid">10:00<br>11:45</div>
+    <div class="okt-innhold">
+      <div class="okt-tittel">Leire, fortelling og refleksjon</div>
+      <div class="okt-detalj">Praktisk og skapende økt. Samtalen kommer naturlig mens hendene er i arbeid. Stoppunkt og refleksjonsspørsmål fra kap. 5 brukes når det passer i prosessen.</div>
+      <div class="okt-tags">
+        <span class="okt-tag">Kroppslig læring</span>
+        <span class="okt-tag">Kollektiv samtale</span>
+        <span class="okt-tag">Kap. 5 · Alvestad</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="okt type-pause">
+    <div class="okt-tid">11:45<br>12:30</div>
+    <div class="okt-innhold">
+      <div class="okt-tittel">Lunsj</div>
+    </div>
+  </div>
+
+  <!-- ETTERMIDDAG -->
+  <div class="seksjon-label">Ettermiddag · Planlegging 2026/2027</div>
+
+  <div class="okt type-planlegg">
+    <div class="okt-tid">12:30<br>12:40</div>
+    <div class="okt-innhold">
+      <div class="okt-tittel">Individuell inngang</div>
+      <div class="okt-detalj">Hva fra Alvestad kap. 5 kjenner du igjen fra din barnehage – og hva overrasket deg? Ingen plenum, bare intern refleksjon.</div>
+    </div>
+  </div>
+
+  <div class="okt type-planlegg">
+    <div class="okt-tid">12:40<br>13:00</div>
+    <div class="okt-innhold">
+      <div class="okt-tittel">Pararbeid – tre par, tre temaer</div>
+      <div class="okt-detalj">
+        Par A → På avdelingen: kollegaveiledning og hverdagslæring<br>
+        Par B → På huset: IGP og erfaringsdeling på tvers<br>
+        Par C → Føringer og forankring: rammeplan og distribuert ansvar
+      </div>
+      <div class="okt-tags">
+        <span class="okt-tag">Roland kap. 4</span>
+        <span class="okt-tag">Alvestad kap. 5</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="okt type-planlegg">
+    <div class="okt-tid">13:00<br>13:15</div>
+    <div class="okt-innhold">
+      <div class="okt-tittel">Deling i plenum</div>
+      <div class="okt-detalj">Hvert par presenterer 3–4 min. De andre kan legge til eller utfordre.</div>
+    </div>
+  </div>
+
+  <div class="okt type-plenum">
+    <div class="okt-tid">13:15<br>13:35</div>
+    <div class="okt-innhold">
+      <div class="okt-tittel">Alle seks · Plenumsdiskusjon om dilemmaet</div>
+      <div class="okt-detalj">Del 1: Hva er vår felles definisjon av pedagogisk bruk – hva er det ikke? Del 2: Hvordan kommuniserer vi dette til foreldre på en måte som bygger tillit?</div>
+      <div class="okt-tags">
+        <span class="okt-tag">Skjermtid</span>
+        <span class="okt-tag">Foreldresamarbeid</span>
+        <span class="okt-tag">Rammeplan</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="okt type-taskcards">
+    <div class="okt-tid">13:35<br>13:50</div>
+    <div class="okt-innhold">
+      <div class="okt-tittel">Fyll inn felles planleggingstavle</div>
+      <div class="okt-detalj">Skriv inn det dere kom frem til i TaskCards – én kolonne per tema, én rad per barnehage. Den felles planen for 2026/2027.</div>
+      <div class="okt-tags">
+        <span class="okt-tag">TaskCards</span>
+        <span class="okt-tag">Plan 2026/2027</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="okt type-avslut">
+    <div class="okt-tid">13:50<br>15:00</div>
+    <div class="okt-innhold">
+      <div class="okt-tittel">Lokal planlegging + avrunding</div>
+      <div class="okt-detalj">Fyll inn det lokale planleggingsarket for din barnehage. Avslutt med ett spørsmål: «Hva er det første du gjør mandag morgen?»</div>
+      <div class="okt-tags">
+        <span class="okt-tag">Lokalt ark</span>
+        <span class="okt-tag">Neste steg</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="forklaring">
+    <div class="fork-item"><div class="fork-stripe" style="background:var(--burgunder)"></div>Oppstart / tilbakeblikk</div>
+    <div class="fork-item"><div class="fork-stripe" style="background:var(--gronn)"></div>Leire / samtale</div>
+    <div class="fork-item"><div class="fork-stripe" style="background:var(--navy)"></div>Pararbeid / deling</div>
+    <div class="fork-item"><div class="fork-stripe" style="background:#c07050)"></div>Plenum</div>
+    <div class="fork-item"><div class="fork-stripe" style="background:var(--oker)"></div>TaskCards</div>
+  </div>
+
+  <!-- REFLEKSJONSSPØRSMÅL KAP 5 -->
+  <div style="margin-top:2.5rem; padding-top:1.5rem; border-top:2px solid var(--burgunder);">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem;">
+      <div>
+        <p style="font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--tekst-lys); margin-bottom:0.2rem;">Til bruk i leire-økten · Alvestad kap. 5</p>
+        <h2 style="font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--navy);">Refleksjonsspørsmål</h2>
+      </div>
+      <p style="font-size:0.75rem; color:var(--tekst-lys); font-style:italic;">Brukes når det passer i prosessen</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem;">
+
+      <div style="background:var(--hvit); border-left:3px solid var(--gronn); border-radius:2px; padding:0.9rem 1rem;">
+        <p style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gronn); margin-bottom:0.4rem;">Bevisst ledelse</p>
+        <p style="font-size:0.84rem; color:var(--tekst); line-height:1.5; font-family:'Playfair Display',serif; font-style:italic;">Hva kjennetegner planarbeidet i din barnehage – er rammeplanen en rettesnor eller en bakgrunn?</p>
+      </div>
+
+      <div style="background:var(--hvit); border-left:3px solid var(--burgunder); border-radius:2px; padding:0.9rem 1rem;">
+        <p style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--burgunder); margin-bottom:0.4rem;">Alle deltar</p>
+        <p style="font-size:0.84rem; color:var(--tekst); line-height:1.5; font-family:'Playfair Display',serif; font-style:italic;">Hvem deltar i planarbeidet i din barnehage – og hvem føler seg som tilskuer?</p>
+      </div>
+
+      <div style="background:var(--hvit); border-left:3px solid var(--oker); border-radius:2px; padding:0.9rem 1rem;">
+        <p style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--oker); margin-bottom:0.4rem;">Motivasjon og mestring</p>
+        <p style="font-size:0.84rem; color:var(--tekst); line-height:1.5; font-family:'Playfair Display',serif; font-style:italic;">Når har du sist opplevd at en ansatt «fant på noe selv» og formidlet det med en helt annen glød?</p>
+      </div>
+
+      <div style="background:var(--hvit); border-left:3px solid var(--farge); border-radius:2px; padding:0.9rem 1rem;">
+        <p style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--farge); margin-bottom:0.4rem;">Privatpraksis</p>
+        <p style="font-size:0.84rem; color:var(--tekst); line-height:1.5; font-family:'Playfair Display',serif; font-style:italic;">Har du ansatte som gjør ting basert på egne vaner og tradisjoner fremfor en felles forståelse – og hva gjør du med det?</p>
+      </div>
+
+      <div style="background:var(--hvit); border-left:3px solid var(--navy); border-radius:2px; padding:0.9rem 1rem; grid-column:1/-1;">
+        <p style="font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--navy); margin-bottom:0.4rem;">Lærende organisasjon</p>
+        <p style="font-size:0.84rem; color:var(--tekst); line-height:1.5; font-family:'Playfair Display',serif; font-style:italic;">Alvestad skriver at planarbeid i seg selv er en læringsarena – ikke bare en administrativ oppgave. Kjenner du igjen det i din barnehage, eller oppleves årsplanen mest som et dokument?</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<button class="print-knapp" onclick="window.print()">
+  <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 9v2h9V9M6.5 1v7M4 6l2.5 2.5L9 6"/></svg>
+  Skriv ut / PDF
+</button>
+
+</body>
+</html>
