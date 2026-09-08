@@ -56,7 +56,13 @@
     @media(max-width:700px) { .sporsmal { grid-template-columns:1fr; gap:0; } .hero { padding:2.5rem 1.25rem; } main { padding:2rem 1.25rem 3rem; } .nav-inner { padding:0.8rem 1.25rem; } }
     @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
     @media print { nav,.skip,.knapp { display:none; } .hero { background:white; color:var(--tekst); padding:1rem 0; } .hero .kicker,.hero p:last-child { color:var(--tekst-lys); } main { padding:1rem 0; } .invitasjon,.deling { break-inside:avoid; } }
-  </style>
+ .barnehage > .kicker {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+} </style>
 </head>
 <body>
   <a class="skip" href="#innhold">Hopp til innhold</a>
