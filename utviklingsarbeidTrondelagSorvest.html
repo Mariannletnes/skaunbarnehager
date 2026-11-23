@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Utviklingsarbeid i DigBarnehage i Skaun. Trøndelag sørvest utforsker hvem vi er i fellesskapet gjennom arbeid med leire.">
+  <title>Utviklingsarbeid i barnehagene · DigBarnehage · Skaun</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=DM+Sans:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root { --rosa:#e8c4c4; --rosa-lys:#f2dada; --burgunder:#7a3a4a; --burgunder-mork:#5a2535; --navy:#1a2a4a; --navy-lys:#2a3a5a; --krem:#f7f0ee; --tekst:#2d1e25; --tekst-lys:#5a4a52; --hvit:#fff; --gronn:#4a7a5a; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:6rem; }
+    body { margin:0; font-family:'DM Sans',sans-serif; background:var(--krem); color:var(--tekst); line-height:1.7; }
+    [hidden] { display:none !important; }
+    a { color:var(--burgunder); text-underline-offset:0.22em; }
+    a:focus-visible { outline:3px solid var(--burgunder); outline-offset:5px; }
+    .skip { position:fixed; top:-6rem; left:1rem; background:white; padding:0.7rem; z-index:200; }
+    .skip:focus { top:1rem; }
+    nav { position:sticky; top:0; z-index:100; background:rgba(247,240,238,0.97); border-bottom:1px solid rgba(122,58,74,0.15); }
+    .nav-inner { max-width:1064px; margin:auto; padding:0.9rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+    .nav-logo { font-family:'Playfair Display',serif; font-size:1rem; color:var(--burgunder); font-weight:700; text-decoration:none; }
+    .nav-tilbake { color:var(--tekst-lys); font-size:0.9rem; }
+    .hero { background:linear-gradient(135deg,var(--burgunder-mork),var(--burgunder)); color:white; padding:3.5rem 2rem; }
+    .inner { max-width:1000px; margin:auto; }
+    .kicker { font-size:0.9rem; margin:0 0 1rem; }
+    .hero .kicker { color:#f2dada; }
+    h1,h2,h3,p { margin-top:0; }
+    h1,h2 { font-family:'Playfair Display',serif; }
+    h1 { font-size:clamp(2.25rem,5vw,3.8rem); line-height:1.15; max-width:850px; margin-bottom:1.2rem; }
+    .hero p:last-child { margin:0; max-width:650px; color:#f2dada; font-size:1.05rem; }
+    main { max-width:1064px; padding:3rem 2rem 4rem; margin:auto; }
+    .barnehage { border-top:3px solid var(--gronn); padding-top:1.5rem; }
+    .barnehage > .kicker { color:var(--gronn); font-weight:500; margin-bottom:0.5rem; }
+    h2 { color:var(--navy); font-size:clamp(1.9rem,4vw,2.6rem); line-height:1.2; margin-bottom:1rem; }
+    .intro { max-width:740px; }
+    .meta { display:flex; flex-wrap:wrap; gap:0.5rem 1.5rem; font-size:0.9rem; color:var(--tekst-lys); margin:1.25rem 0 1.75rem; }
+    .intro a { font-weight:500; }
+    .invitasjon { background:var(--hvit); border-left:4px solid var(--burgunder); padding:clamp(1.3rem,4vw,2.5rem); margin:2rem 0; }
+    h3 { font-size:1.15rem; line-height:1.4; color:var(--burgunder); margin-bottom:0.8rem; }
+    .invitasjon p { max-width:780px; }
+    .invitasjon p:last-child { margin-bottom:0; }
+    .sporsmal { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.3rem; margin:1.75rem 0; }
+    .sporsmal article { padding:1.2rem 0; border-top:1px solid var(--rosa); }
+    .sporsmal p { margin-bottom:0; color:var(--tekst-lys); }
+    .valgfri { color:var(--tekst-lys); max-width:760px; }
+    .deling { padding:clamp(1.3rem,4vw,2.5rem); background:var(--rosa-lys); margin-top:2.5rem; border-radius:4px; }
+    .deling h2 { font-size:1.8rem; }
+    .deling p { max-width:720px; }
+    .knapp { display:inline-flex; align-items:center; justify-content:center; min-height:48px; background:var(--burgunder); color:white; font-weight:500; padding:0.75rem 1.25rem; border-radius:3px; text-decoration:none; }
+    .knapp:hover { background:var(--burgunder-mork); }
+    .taskcards-tavle { display:block; width:100%; height:500px; border:0; margin-top:1.5rem; background:var(--hvit); border-radius:3px; }
+    .videre { max-width:800px; margin-top:3rem; }
+    .videre h2 { font-size:1.8rem; }
+    .refleksjon { font-family:'Playfair Display',serif; color:var(--burgunder); font-size:1.35rem; line-height:1.5; }
+    footer { background:var(--navy-lys); color:#d5dbe4; text-align:center; padding:2rem; font-size:0.9rem; }
+    @media(max-width:700px) { .sporsmal { grid-template-columns:1fr; gap:0; } .hero { padding:2.5rem 1.25rem; } main { padding:2rem 1.25rem 3rem; } .nav-inner { padding:0.8rem 1.25rem; } }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+    @media print { nav,.skip,.knapp { display:none; } .hero { background:white; color:var(--tekst); padding:1rem 0; } .hero .kicker,.hero p:last-child { color:var(--tekst-lys); } main { padding:1rem 0; } .invitasjon,.deling { break-inside:avoid; } }
+
+    .hjul-sek { margin-top:3rem; }
+    .hjul-sek h2 { font-size:1.8rem; }
+    .hjul-sek > p { max-width:740px; }
+    .hjul-wrap { background:var(--hvit); border-radius:4px; padding:0.5rem; margin:1.5rem 0 0; }
+    .hjul-wrap svg { width:100%; height:auto; display:block; }
+    .hjul-wrap .celle { cursor:pointer; transition:opacity .15s; }
+    .hjul-wrap .celle:hover { opacity:.75; }
+    .hjul-skala { display:flex; justify-content:space-between; font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--tekst-lys); padding:0.6rem 0.8rem 0.3rem; }
+    .hjul-fokus { background:var(--hvit); border-top:3px solid var(--gronn); border-radius:4px; padding:1.1rem 1.3rem; margin-top:1.5rem; }
+    .hjul-fokus label { display:block; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gronn); margin-bottom:0.4rem; }
+    .hjul-fokus p { font-size:0.9rem; color:var(--tekst-lys); margin-bottom:0.6rem; }
+    .hjul-fokus textarea { width:100%; min-height:80px; border:1px solid rgba(90,74,82,0.2); border-radius:3px; padding:0.6rem 0.8rem; resize:vertical; font-family:inherit; font-size:0.95rem; color:var(--tekst); background:var(--krem); }
+    .hjul-knapper { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1rem; }
+    .knapp.sek { background:transparent; color:var(--burgunder); border:1px solid rgba(122,58,74,0.4); cursor:pointer; font-family:inherit; font-size:1rem; }
+    .knapp.sek:hover { background:var(--rosa-lys); }
+    button.knapp { border:0; cursor:pointer; font-family:inherit; font-size:1rem; }
+    .rom-steg { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; margin-top:1.5rem; }
+    .rom-steg div { background:var(--hvit); border-top:3px solid var(--rosa); border-radius:3px; padding:1rem 1.1rem; font-size:0.9rem; color:var(--tekst-lys); }
+    .rom-steg b { display:block; color:var(--navy); margin-bottom:0.2rem; }
+    @media(max-width:700px) { .rom-steg { grid-template-columns:1fr; } }
+    @media print { body.skriv-hjul .hero, body.skriv-hjul .barnehage > :not(.hjul-sek) { display:none !important; } body.skriv-hjul .hjul-knapper { display:none; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#innhold">Hopp til innhold</a>
+  <nav aria-label="Hovednavigasjon">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">DigBarnehage · Skaun</a>
+      <a class="nav-tilbake" href="2026.html">Tilbake til 2026</a>
+    </div>
+  </nav>
+  <header class="hero">
+    <div class="inner">
+      <p class="kicker">DigBarnehage · Skaun kommune &amp; DMMH · 2026/2027</p>
+      <h1>Utviklingsarbeid i barnehagene</h1>
+      <p>Veiledning, praktisk utforsking og felles refleksjon i den enkelte barnehage.</p>
+    </div>
+  </header>
+  <main id="innhold">
+    <section class="barnehage" id="tsv" aria-labelledby="tsv-tittel">
+      <p class="kicker">Trøndelag sørvest</p>
+      <h2 id="tsv-tittel">Hvem er jeg i fellesskapet?</h2>
+      <div class="intro">
+        <p>Vi møter hverandre med ulike erfaringer, styrker og behov. Gjennom arbeid med leire utforsker vi hvem vi er i fellesskapet, hva vi bidrar med, og hva vi trenger fra hverandre.</p>
+        <div class="meta"><span>Leiresekvens</span><span>Omtrent 1,5 time</span></div>
+        <a href="#del-figuren">Del bilde av figuren din</a>
+      </div>
+      <div class="invitasjon">
+        <h3>En figur som representerer deg</h3>
+        <p>Form en figur som representerer deg i fellesskapet vårt. Figuren trenger ikke ligne deg utenpå. La formen utvikle seg mens du arbeider med leiren og tenker over hvem du er sammen med andre.</p>
+        <p>Gi etter hvert figuren et navn som uttrykker noe om deg og din plass i fellesskapet. Formen og navnet kan vokse frem underveis.</p>
+      </div>
+      <div class="sporsmal" aria-label="Spørsmål å tenke med">
+        <article><h3>Hva bidrar jeg med?</h3><p>Hva liker jeg å bidra med, og når kommer styrkene mine frem?</p></article>
+        <article><h3>Hva trenger jeg?</h3><p>I hvilke situasjoner trenger jeg hjelp eller støtte fra andre?</p></article>
+        <article><h3>Hvem er figuren?</h3><p>Hva forteller formen og navnet om meg i fellesskapet?</p></article>
+      </div>
+      <p class="valgfri">Du velger selv hva du vil dele. Når vi møter hverandres figurer, lytter vi til det den enkelte ønsker å fortelle om sin egen figur.</p>
+      <section class="deling" id="del-figuren" aria-labelledby="deling-tittel">
+        <h2 id="deling-tittel">Figurene våre</h2>
+        <p>Ta et bilde av leirefiguren din. Last opp bildet i vår felles TaskCards-tavle, og bruk figurens navn som overskrift. Skriv gjerne noen setninger om det du ønsker å dele om figuren og deg selv i fellesskapet.</p>
+        <a class="knapp" id="taskcards-lenke" href="https://ntnu.taskcards.app/#/board/1878d7ab-bf7d-46d9-90e7-dccac93fc804?token=559d4b0d-4d79-44fe-b51a-e2f97cd532ba" target="_blank" rel="noopener noreferrer">Åpne TaskCards i egen fane</a>
+        <iframe class="taskcards-tavle" src="https://ntnu.taskcards.app/#/board/1878d7ab-bf7d-46d9-90e7-dccac93fc804?token=559d4b0d-4d79-44fe-b51a-e2f97cd532ba" title="TaskCards: Leirefigurene våre i Trøndelag sørvest" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
+      </section>
+      <section class="hjul-sek" id="trygghetshjul" aria-labelledby="hjul-tittel">
+        <h2 id="hjul-tittel">Trygghetshjulet</h2>
+        <p>Hvor trygg føler jeg meg i de ulike delene av lederrollen? Trykk på feltene fra midten og utover. Jo lenger ut du farger, jo tryggere føler du deg. Trykk igjen på det ytterste fargede feltet for å ta det bort. Hjulet viser hvor du står akkurat nå.</p>
+        <div class="hjul-wrap">
+          <svg id="hjul" viewBox="0 0 900 760" role="img" aria-label="Trygghetshjul med åtte felt"></svg>
+          <div class="hjul-skala"><span>Midten = utrygg</span><span>Ytterst = trygg</span></div>
+        </div>
+        <div class="hjul-fokus">
+          <label for="fokus">Ett felt jeg vil ha litt fokus på fremover</label>
+          <p>Velg ett av feltene der du ikke føler deg like trygg ennå.</p>
+          <textarea id="fokus" placeholder="Skriv her …"></textarea>
+        </div>
+        <div class="hjul-knapper">
+          <button class="knapp" type="button" id="skrivut">Skriv ut hjulet</button>
+          <button class="knapp sek" type="button" id="nullstill">Nullstill</button>
+        </div>
+        <div class="rom-steg">
+          <div><b>1. Velg sted</b>Hvert av de åtte feltene henger som en plakat på ulike steder i rommet. Gå til feltet der du føler deg tryggest.</div>
+          <div><b>2. Fortell</b>Snakk to og to med den som står nærmest. Hva gjør at du er trygg akkurat her?</div>
+          <div><b>3. Bytt</b>Gå så til feltet der du er mest usikker. Hva trenger du, og hvem i rommet kan du spørre?</div>
+        </div>
+      </section>
+      <section class="videre" aria-labelledby="videre-tittel">
+        <h2 id="videre-tittel">Fra leirearbeidet til lederrollen</h2>
+        <p>Erfaringene fra leiresekvensen er en inngang til det videre arbeidet med lederrollen.</p>
+        <p class="refleksjon">Hva har figuren din fortalt om deg som leder?</p>
+      </section>
+    </section>
+  </main>
+  <footer>DigBarnehage · Skaun kommune &amp; DMMH · NTNU</footer>
+  <script>
+    var felt = ['Faglig utvikling','Lede personalgruppa','Samarbeid i teamet','Samarbeid med hjemmet','Kollegaveiledning','Overganger mellom avd.','Relasjonsbygging','Bemanning'];
+    var farger = ['#e8c4c4','#c98a95','#a15566','#7a3a4a'];
+    var N = felt.length, RINGER = 4, cx = 450, cy = 380, r0 = 50, steg = 55;
+    var NS = 'http://www.w3.org/2000/svg';
+    var nivaa = []; for (var q = 0; q < N; q++) nivaa.push(0);
+    var svg = document.getElementById('hjul');
+    var celler = [];
+    function pt(r, a){ return [cx + r * Math.cos(a), cy + r * Math.sin(a)]; }
+    function sektor(i, k){
+      var a0 = -Math.PI / 2 + (i - 0.5) * 2 * Math.PI / N, a1 = a0 + 2 * Math.PI / N;
+      var ri = r0 + (k - 1) * steg, ro = r0 + k * steg;
+      var p1 = pt(ro, a0), p2 = pt(ro, a1), p3 = pt(ri, a1), p4 = pt(ri, a0);
+      return 'M' + p1[0] + ',' + p1[1] + ' A' + ro + ',' + ro + ' 0 0 1 ' + p2[0] + ',' + p2[1] +
+             ' L' + p3[0] + ',' + p3[1] + ' A' + ri + ',' + ri + ' 0 0 0 ' + p4[0] + ',' + p4[1] + ' Z';
+    }
+    function tegn(){
+      for (var i = 0; i < N; i++){
+        celler[i] = [];
+        for (var k = 1; k <= RINGER; k++){
+          (function(i, k){
+            var p = document.createElementNS(NS, 'path');
+            p.setAttribute('d', sektor(i, k));
+            p.setAttribute('class', 'celle');
+            p.setAttribute('stroke', '#7a3a4a');
+            p.setAttribute('stroke-opacity', '0.35');
+            p.setAttribute('stroke-width', '1.2');
+            p.addEventListener('click', function(){ nivaa[i] = (nivaa[i] === k) ? k - 1 : k; oppdater(); });
+            svg.appendChild(p);
+            celler[i][k] = p;
+          })(i, k);
+        }
+        var am = -Math.PI / 2 + i * 2 * Math.PI / N;
+        var tp = pt(r0 + RINGER * steg + 20, am);
+        var t = document.createElementNS(NS, 'text');
+        t.setAttribute('x', tp[0]); t.setAttribute('y', tp[1] + 5);
+        t.setAttribute('font-size', '16'); t.setAttribute('font-family', 'DM Sans, sans-serif');
+        t.setAttribute('font-weight', '500'); t.setAttribute('fill', '#1a2a4a');
+        var c = Math.cos(am);
+        t.setAttribute('text-anchor', c > 0.3 ? 'start' : (c < -0.3 ? 'end' : 'middle'));
+        t.textContent = felt[i];
+        svg.appendChild(t);
+      }
+      var mid = document.createElementNS(NS, 'circle');
+      mid.setAttribute('cx', cx); mid.setAttribute('cy', cy); mid.setAttribute('r', r0 - 6);
+      mid.setAttribute('fill', '#f7f0ee'); mid.setAttribute('stroke', '#7a3a4a'); mid.setAttribute('stroke-opacity', '0.35');
+      svg.appendChild(mid);
+      oppdater();
+    }
+    function oppdater(){
+      for (var i = 0; i < N; i++) for (var k = 1; k <= RINGER; k++)
+        celler[i][k].setAttribute('fill', k <= nivaa[i] ? farger[k - 1] : '#ffffff');
+    }
+    document.getElementById('nullstill').addEventListener('click', function(){
+      if (!confirm('Nullstille hjulet?')) return;
+      for (var i = 0; i < N; i++) nivaa[i] = 0;
+      document.getElementById('fokus').value = '';
+      oppdater();
+    });
+    document.getElementById('skrivut').addEventListener('click', function(){
+      document.body.classList.add('skriv-hjul');
+      window.print();
+    });
+    window.addEventListener('afterprint', function(){ document.body.classList.remove('skriv-hjul'); });
+    tegn();
+  </script>
+</body>
+</html>
